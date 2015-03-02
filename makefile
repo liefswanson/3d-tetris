@@ -1,32 +1,42 @@
 libs   = -lGLEW -lglfw -lGL -lX11 -lpthread #-lXrandr -lXi
-t_libs = -gtest
+tLibs  = -lgtest
 cflags = -Wall -g
 std    = -std=c++11
 cc     = clang++
 app    = 3d-tetris.app
 
 srcs   = termColor.cpp # main.cpp grid.cpp board.cpp piece.cpp tile.cpp renderable.cpp coordMap.cpp VAOBuilder.cpp shaderBuilder.cpp
-objs   = $(srcs: .cpp=.o) 
+tests  = $(srcs:.cpp=.test)
+objs   = $(srcs:.cpp=.o)
 
 all: $(objs)
 	cd obj/
-	$(cc) $(std) $(libs) $(lflags) $(objs) -o ../$(app)
+	$(cc) $(std) $(libs) $(objs) -o ../$(app)
 	cd ../
 
 run: all
 	./$(app)
 
-test: $(srcs: .cpp=.test) 
+# run all tests and then output the date the test was complete
+test: $(tests)
+	date
 
-array2d.test:
-	$(cc) $(std) $(t_libs) ./test/array2d_test.cpp -o ./test_bin/array2d.test
-	test_bin/array2d.test
-
-%.test: obj/$*.o	 src/$*_test.cpp
-	$(cc) $(std) $(t_libs) ./obj/$*.o ./test/$*_test.cpp -o ./test_bin/$*.test
+# link gtest object to it's object and run the test
+%.test: %.o %_test.o 
+	$(cc) $(std) $(tLibs) obj/$*.o test_obj/$*_test.o -o test_bin/$*.test
 	test_bin/$*.test
 
+# make arbitrary gtest object
+%_test.o:
+	$(cc) $(std) $(cflags) -c test/$*_test.cpp -o test_obj/$*_test.o
+
+# make arbitrary non gtest object
+%.o:
+	$(cc) $(std) $(cflags) -c src/$*.cpp -o obj/$*.o
+
 clean:
-	rm obj/*
-	rm test_bin/*
 	rm $(app)
+	rm obj/*
+
+	rm test_bin/*
+	rm test_obj/*
