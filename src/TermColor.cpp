@@ -1,4 +1,4 @@
-#include "termColor.hpp"
+#include "TermColor.hpp"
 
 const std::string Term::Reset      ="\e[0m";
 
@@ -65,9 +65,9 @@ const std::string Term::On_IPurple ="\e[0;105m";
 const std::string Term::On_ICyan   ="\e[0;106m";
 const std::string Term::On_IWhite  ="\e[0;107m";
 
-const std::string Term::INFO       ="[\e[0;96mINFO\e[0m]";
-const std::string Term::WARN       ="[\e[0;93mWARN\e[0m]";
-const std::string Term::ERROR      ="[\e[0;91mERRO\e[0m]";
+const std::string Term::INFO       ="\e[0;96m[ INFO ]\e[0m";
+const std::string Term::WARN       ="\e[0;93m[ WARN ]\e[0m";
+const std::string Term::ERROR      ="\e[0;91m[ ERRO ]\e[0m";
 
-const std::string Term::PASS       ="[\e[0;92mPASS\e[0m]";
-const std::string Term::FAIL       ="[\e[0;95mFAIL\e[0m]";
+const std::string Term::PASS       ="\e[0;92m[ PASS ]\e[0m";
+const std::string Term::FAIL       ="\e[0;95m[ FAIL ]\e[0m";
