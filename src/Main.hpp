@@ -8,8 +8,7 @@
 #include "VAOBuilder.hpp"
 #include "ShaderBuilder.hpp"
 #include "Camera.hpp"
-#include "Renderable.hpp"
-
+#include "Tile.hpp"
 
 
 const GLuint WIDTH  = 400,
