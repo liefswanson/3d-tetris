@@ -27,10 +27,10 @@ void updateTime(){
 void
 actOnKeys(){
 	if(keys[GLFW_KEY_LEFT]){
-		angle -= 20.f * deltaTime;
+		angle -= orbitSpeed *deltaTime;
 	}
 	if(keys[GLFW_KEY_RIGHT]) {
-		angle += 20.f * deltaTime;
+		angle += orbitSpeed *deltaTime;
 	}
 }
 
@@ -62,10 +62,11 @@ main(int argc, char *argv[]) {
 	Tile::init();
 
 	Camera cam = Camera(glm::vec3(0.f, 1.f, 0.f),
-						glm::vec3(2.f, 0.f, 2.f),
-						glm::vec3(0.f, 0.f, 0.f),
+						glm::vec3(), // this need not be initialized it is updated every turn
+						origin, 
 						45.f, (GLfloat)WIDTH/(GLfloat)HEIGHT,
 						0.1f, 100.f);
+	
 	cam.addProgram(Tile::program);
 
 	Tile temp  = Tile(ORANGE);
@@ -79,7 +80,7 @@ main(int argc, char *argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cam.location = glm::vec3(distance * sin(-glm::radians(angle)),
-								 0.f,
+								 origin.y,
 								 -distance * cos(-glm::radians(angle)));
 		cam.Update();
 

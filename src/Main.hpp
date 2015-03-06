@@ -23,5 +23,6 @@ GLfloat timeLastFrame = 0.f;
 GLfloat timeThisFrame = 0.f;
 
 const glm::vec3 origin  = glm::vec3(0.f, 0.f, 0.f);
-GLfloat   distance = 10.f;
-GLfloat   angle    = 0.f;
+GLfloat   distance      = 10.f;
+GLfloat   angle         = 0.f;
+GLfloat   orbitSpeed    = 20.f;
