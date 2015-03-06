@@ -5,14 +5,12 @@ std    = -std=c++11
 cc     = clang++
 app    = 3d-tetris.app
 
-srcs   = TermColor.cpp # main.cpp grid.cpp board.cpp piece.cpp tile.cpp renderable.cpp coordMap.cpp VAOBuilder.cpp shaderBuilder.cpp
+srcs   = TermColor.cpp Main.cpp ShaderBuilder.cpp VAOBuilder.cpp Renderable.cpp Camera.cpp # grid.cpp board.cpp piece.cpp tile.cpp
 tests  = $(srcs:.cpp=.test) Array2D.test
 objs   = $(srcs:.cpp=.o)
 
 all: $(objs)
-	cd obj/
-	$(cc) $(std) $(libs) $(objs) -o ../bin/$(app)
-	cd ../
+	cd obj/; $(cc) $(std) $(libs) $(objs) -o ../bin/$(app); cd ../
 
 run: all
 	bin/$(app)

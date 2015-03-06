@@ -5,8 +5,8 @@
 class VAOBuilder {
 
 public:
-	static GLuint buildVAO(GLfloat* vertices, GLuint countV,
-						   GLuint*  indices,  GLuint countI);
+	static GLuint buildVAO(GLuint& VBO, const GLfloat* vertices, GLuint countV,
+						   GLuint& EBO, const GLubyte* indices,  GLuint countI);
 
 private:
 	VAOBuilder() {}
