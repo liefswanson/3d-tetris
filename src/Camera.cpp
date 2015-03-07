@@ -25,6 +25,14 @@ Camera::addProgram(GLuint program){
 }
 
 void
+Camera::removeProgram(GLuint program){
+	auto index = std::find(programs.begin(), programs.end(), program);
+	if (index != programs.end()) {
+		programs.erase(index);
+	}
+}
+
+void
 Camera::Update(){
 	view       = glm::lookAt(target-location, location, up);
 	projection = glm::perspective(fov, aspectRatio, near, far);

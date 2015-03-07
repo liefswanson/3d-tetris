@@ -60,25 +60,25 @@ Board::set(uint row, uint col, Tile* val) {
 
 Tile**
 Board::scanForFullRows() {
-	auto diff = new Tile*[cols*(rows-spawnRows)];
+	auto diff = new Tile*[cols*rows];
 
-	for (uint i = 0; i < cols*(rows-spawnRows); i++){
+	for (uint i = 0; i < cols*rows; i++){
 		diff[i] = NULL;
 	}
 	
-	for(uint row = spawnRows; row < rows; ++row){
+	for(uint row = 0; row < rows; ++row){
 		bool valid = true;
 		for(uint col = 0; col < cols; ++col) {
-			if (board[cols*(row) + col] == NULL) {
+			if (board[cols*row + col] == NULL) {
 				valid = false;
 				break;
 			} else {
-				diff[cols*(row - spawnRows) + col] = board[cols*row + col];
+				diff[cols*row +col] = board[cols *row + col];
 			}
 		}
 		if(!valid) {
 			for(uint col = 0; col < cols; ++col) {
-				diff[cols*(row - spawnRows) + col] = NULL;
+				diff[cols*row +col] = NULL;
 			}
 		}
 	}
@@ -205,16 +205,12 @@ Board::mergeDiffs(Tile** a, Tile** b) {
 
 bool
 Board::validateDiff(Tile** diff){
-	uint count = 0;
-	for(uint i = 0; i < rows -spawnRows; ++i ) {
+	for(uint i = 0; i < rows*cols; ++i ) {
 		if (diff[i] != NULL) {
-			++count;
+			return GL_TRUE;
 		}
 	}
-	if(count == 0){
-		return GL_FALSE;
-	}
-	return GL_TRUE;
+	return GL_FALSE;
 }
 
 void
@@ -246,12 +242,30 @@ Board::removeDiff(Tile** diff) {
 
 void
 Board::debugDiff(Tile** diff){
-	for(uint row = 0; row < rows-spawnRows; ++row) {
-		std::cout << std::setfill(' ') << std::setw(2) << row;
+	for(uint row = 0; row < rows; ++row) {
+		std::cout << std::setfill(' ') << std::setw(2) << (int)row -(int)spawnRows;
 		std::cout << ':';
 		for(uint col = 0; col < cols; ++col) {
-			if(diff[cols*row + col] != NULL) {
-				std::cout << '+';
+			auto temp = diff[cols*row + col]; 
+			if(temp != NULL) {
+				switch(temp->fruit()){
+				case APPLE:
+					std::cout << Term::IRed << '+';
+					break;
+				case BANANA:
+					std::cout << Term::IYellow << '+';
+					break;
+				case GRAPE:
+					std::cout << Term::IPurple << '+';
+					break;
+				case PEAR:
+					std::cout << Term::IGreen << '+';
+					break;
+				case ORANGE:
+					std::cout << Term::Yellow << '+';
+					break;
+				}
+				std::cout << Term::Reset;
 			} else {
 				std::cout << '-';
 			}
@@ -294,3 +308,15 @@ uint
 Board::Rows()      {return rows;}
 uint
 Board::Cols()      {return cols;}
+
+// dangerous operation
+// DEBUG ONLY
+bool
+Board::eq(Tile** diff) {
+	for(uint i = 0; i < rows*cols; i++) {
+		if (board[i] != diff[i]) {
+			return false;
+		}
+	}
+	return true;
+}

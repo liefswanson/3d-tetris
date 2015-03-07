@@ -65,3 +65,8 @@ Tile::Tile(uint fruit)
 }
 
 Tile::~Tile(){}
+
+uint
+Tile::fruit() {
+	return _fruit;
+}

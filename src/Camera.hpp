@@ -7,9 +7,11 @@
 
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 class Camera {
 public:
+	
 	// control the view
 	glm::vec3 up;
 	glm::vec3 location;
@@ -29,7 +31,10 @@ public:
 	// propogate changes to the shader
 	void Update();
 
-	void addProgram(GLuint program);
+	void addProgram   (GLuint program);
+	void removeProgram(GLuint program);
+
+	std::vector<GLuint> debug() {return std::vector<GLuint>(programs);}
 	
 private:
 	// list of shader programs which this camera applies to

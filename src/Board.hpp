@@ -37,6 +37,8 @@ public:
 	uint Rows();
 	uint Cols();
 
+	bool eq(Tile** diff);
+
 private:
 	uint spawnRows;
 	uint rows;
