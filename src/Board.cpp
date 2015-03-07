@@ -88,13 +88,13 @@ Board::scanForFullRows() {
 Tile**
 Board::scanForFruitChainsRows() {
 
-	Tile** diff  = new Tile*[cols*(rows -spawnRows)];
+	Tile** diff  = new Tile*[cols*rows];
 
-	for (uint i = 0; i < cols*(rows -spawnRows); i++) {
+	for (uint i = 0; i < cols*rows; i++) {
 		diff[i] = NULL;
 	}
 		
-	for(uint row = spawnRows; row < rows; ++row) {
+	for(uint row = 0; row < rows; ++row) {
 		uint chain   = 0;
 		Tile* firstLink = NULL;
 		uint col = 0;
@@ -109,7 +109,7 @@ Board::scanForFruitChainsRows() {
 				} else {
 					if (chain >= CHAIN_LENGTH) {
 						for(uint i = 1; i <= chain; ++i) {
-							diff[cols*(row - spawnRows) + col - i] = board[cols*row + col -i];
+							diff[cols*row + col - i] = board[cols*row + col -i];
 						}
 					}
 					firstLink = temp;
@@ -129,7 +129,7 @@ Board::scanForFruitChainsRows() {
 		}
 		if (chain >= CHAIN_LENGTH) {
 			for(uint i = 1; i <= chain; ++i) {
-				diff[cols*(row - spawnRows) + col - i] = board[cols*row + col -i];
+				diff[cols*row + col - i] = board[cols*row + col -i];
 			}
 		}
 	}
@@ -139,9 +139,9 @@ Board::scanForFruitChainsRows() {
 Tile**
 Board::scanForFruitChainsCols() {
 
-	Tile** diff  = new Tile*[cols*(rows -spawnRows)];
+	Tile** diff  = new Tile*[cols*rows];
 
-	for (uint i = 0; i < cols*(rows -spawnRows); i++) {
+	for (uint i = 0; i < cols*rows; i++) {
 		diff[i] = NULL;
 	}
 	
@@ -149,7 +149,7 @@ Board::scanForFruitChainsCols() {
 		
 		uint chain   = 0;
 		Tile* firstLink = NULL;
-		uint row = spawnRows;
+		uint row = 0;
 		for(; row < rows; ++row) {
 			Tile* temp = at(row, col);
 
@@ -161,7 +161,7 @@ Board::scanForFruitChainsCols() {
 				} else {
 					if (chain >= CHAIN_LENGTH) {
 						for(uint i = 1; i <= chain; ++i) {
-							diff[cols*(row -spawnRows -i) + col] = board[cols*(row -i) + col];
+							diff[cols*(row -i) + col] = board[cols*(row -i) + col];
 						}
 					}
 					firstLink = temp;
@@ -181,7 +181,7 @@ Board::scanForFruitChainsCols() {
 		}
 		if (chain >= CHAIN_LENGTH) {
 			for(uint i = 1; i <= chain; ++i) {
-				diff[cols*(row -spawnRows -i) + col] = board[cols*(row -i) + col];
+				diff[cols*(row -i) + col] = board[cols*(row -i) + col];
 			}
 		}
 	}

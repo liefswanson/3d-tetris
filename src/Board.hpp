@@ -39,10 +39,9 @@ public:
 
 	bool eq(Tile** diff);
 
+	const static uint CHAIN_LENGTH = 3;
 private:
 	uint spawnRows;
 	uint rows;
 	uint cols;
-
-	const uint CHAIN_LENGTH = 3;
 };
