@@ -6,7 +6,7 @@ cc     = clang++
 app    = 3d-tetris.app
 
 srcs   = TermColor.cpp Main.cpp ShaderBuilder.cpp VAOBuilder.cpp Renderable.cpp Camera.cpp Tile.cpp # grid.cpp board.cpp piece.cpp tile.cpp
-tests  = $(srcs:.cpp=.test) Array2D.test
+tests  = $(srcs:.cpp=.test) # Array2D.test
 objs   = $(srcs:.cpp=.o)
 
 all: $(objs)
@@ -19,9 +19,9 @@ run: all
 test: $(tests)
 	date
 
-Array2D.test: Array2D_test.o TermColor.o
-	$(cc) $(std) $(tLibs) obj/TermColor.o test_obj/Array2D_test.o -o test_bin/$@
-	test_bin/$@
+# Array2D.test: Array2D_test.o TermColor.o
+# 	$(cc) $(std) $(tLibs) obj/TermColor.o test_obj/Array2D_test.o -o test_bin/$@
+# 	test_bin/$@
 
 # link gtest object to it's object(s) to test and run that test
 %.test: %.o %_test.o 

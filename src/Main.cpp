@@ -79,7 +79,7 @@ main(int argc, char *argv[]) {
 		glClearColor(BG, BG, BG, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cam.location = glm::vec3(distance * sin(-glm::radians(angle)),
+		cam.location = glm::vec3(distance  * sin(-glm::radians(angle)),
 								 origin.y,
 								 -distance * cos(-glm::radians(angle)));
 		cam.Update();
