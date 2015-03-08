@@ -18,7 +18,8 @@ glm::vec3 origin  = glm::vec3(0.f, 0.f, 0.f);
 GLfloat BG = 0.082f;
 
 RangeMap colMap = RangeMap(0.f, (GLfloat)COLS-1, -(GLfloat)COLS /2, (GLfloat)COLS /2);
-RangeMap rowMap = RangeMap((GLfloat)SROWS, (GLfloat)ROWS-1, -(GLfloat)(ROWS-SROWS) /2, (GLfloat)(ROWS-SROWS) /2);
+RangeMap rowMap = RangeMap((GLfloat)SROWS, (GLfloat)ROWS-1.f/ASPECT_RATIO, -(GLfloat)(ROWS-SROWS) /2, (GLfloat)(ROWS-SROWS) /2);
+
 
 glm::vec3 colors[] {
 	glm::vec3(0.753f, 0.224f, 0.169f), // apple

@@ -70,34 +70,16 @@ main(int argc, char *argv[]) {
 	cam.addProgram(Tile::program);
 
 	Board board (ROWS, COLS, SROWS);
-	board.makeAt(0, 0, APPLE);
-	board.makeAt(1, 1, APPLE);
-	board.makeAt(2, 2, APPLE);
-	board.makeAt(3, 3, APPLE);
-	board.makeAt(4, 4, APPLE);
-	board.makeAt(5, 5, APPLE);
-	board.makeAt(6, 6, APPLE);
-	board.makeAt(7, 7, APPLE);
-	board.makeAt(8, 8, APPLE);
-	board.makeAt(9, 9, APPLE);
+	for (uint i = SROWS; i < ROWS; i++) {
+		board.makeAt(i, COLS-1, PEAR);
+		board.makeAt(i, 0, APPLE);
+	}
+
+	for (uint i = 1; i < COLS -1; i++) {
+		board.makeAt(SROWS, i, GRAPE);
+		board.makeAt(ROWS-1, i, BANANA);
+	}
 	
-	board.makeAt(10, 0, ORANGE);
-	board.makeAt(11, 1, ORANGE);
-	board.makeAt(12, 2, ORANGE);
-	board.makeAt(13, 3, ORANGE);
-	board.makeAt(14, 4, ORANGE);
-	board.makeAt(15, 5, ORANGE);
-	board.makeAt(16, 6, ORANGE);
-	board.makeAt(17, 7, ORANGE);
-	board.makeAt(18, 8, ORANGE);
-	board.makeAt(19, 9, ORANGE);
-
-	board.makeAt(20, 0, PEAR);
-	board.makeAt(21, 1, PEAR);
-	board.makeAt(22, 2, PEAR);
-	board.makeAt(23, 3, PEAR);
-	board.makeAt(24, 4, PEAR);
-
 	board.debugDiff(board.board);
 
 	while(!glfwWindowShouldClose(window)) {
