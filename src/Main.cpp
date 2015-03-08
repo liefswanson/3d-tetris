@@ -59,8 +59,8 @@ main(int argc, char *argv[]) {
 	glfwSetKeyCallback(window, key_callback);
     glfwSetScrollCallback(window, scroll_callback);
 	
-	Tile::init();
-    // glm::vec3(2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS)
+	Tile::init(glm::vec3(.8f, .8f, .8f));
+
 	Camera cam = Camera(glm::vec3(0.f, -1.f, 0.f),
 						glm::vec3(), // this need not be initialized it is updated every turn
 						origin, 
@@ -82,12 +82,13 @@ main(int argc, char *argv[]) {
 	
 	board.debugDiff(board.board);
 
+	
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
 		glfwPollEvents();
 		actOnKeys();
 		
-		glClearColor(BG, BG, BG, 1.0f);
+		glClearColor(BG, BG, BG, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cam.location = glm::vec3(distance  * sin(-glm::radians(angle)),

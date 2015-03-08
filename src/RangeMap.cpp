@@ -1,6 +1,5 @@
 #include "RangeMap.hpp"
 
-
 RangeMap::RangeMap(GLfloat inLow,  GLfloat inHigh,
 				   GLfloat outLow, GLfloat outHigh){
 	this->inOffset  = inLow;
@@ -17,17 +16,9 @@ RangeMap::map(GLfloat x){
 	return (x - inOffset) * ratio + outOffset;
 }
 
-RangeMap::~RangeMap(){}
-
 GLfloat
-mapTo(GLfloat inLow,  GLfloat inHigh,
-	  GLfloat outLow, GLfloat outHigh,
-	  GLfloat x) {
-
-	GLfloat inRange = inHigh-inLow;
-	GLfloat outRange = outHigh-outLow;
-
-	GLfloat xOut = (x - inLow) * (outRange / inRange) + outLow;
-	
-	return xOut;
+RangeMap::mapBack(GLfloat x) {
+	return (x - outOffset) / ratio + inOffset;
 }
+
+RangeMap::~RangeMap(){}

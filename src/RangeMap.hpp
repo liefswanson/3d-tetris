@@ -17,6 +17,6 @@ public:
 	~RangeMap();
 
 	// moves a number from one map to another
-	GLfloat
-	map(GLfloat x);
+	GLfloat map    (GLfloat x);
+	GLfloat mapBack(GLfloat x);
 };
