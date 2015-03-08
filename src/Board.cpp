@@ -285,6 +285,14 @@ Board::render() {
 			Tile* current = this->at(row, col);
 			if (current != NULL) {
 				//TODO doesn't actually render
+				// current->location = glm::vec3(gridMap.map((GLfloat)col),
+				// 							  gridMap.map((GLfloat)row),
+				// 							  0.f);
+				current->location = glm::vec3(
+					gridMap.map((GLfloat)col),
+					gridMap.map((GLfloat)row),
+					0.f);
+				current->render();
 			}
 		}
 	}

@@ -60,7 +60,7 @@ main(int argc, char *argv[]) {
     glfwSetScrollCallback(window, scroll_callback);
 	
 	Tile::init();
-
+    // glm::vec3(2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS)
 	Camera cam = Camera(glm::vec3(0.f, 1.f, 0.f),
 						glm::vec3(), // this need not be initialized it is updated every turn
 						origin, 
@@ -69,8 +69,10 @@ main(int argc, char *argv[]) {
 	
 	cam.addProgram(Tile::program);
 
-	Tile temp  = Tile(ORANGE);
-	
+	Board board (ROWS, COLS, SROWS);
+	board.makeAt(10, 5, PEAR);
+	board.makeAt(10, 6, ORANGE);
+
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
 		glfwPollEvents();
@@ -84,7 +86,7 @@ main(int argc, char *argv[]) {
 								 -distance * cos(-glm::radians(angle)));
 		cam.Update();
 
-        temp.render();
+		board.render();
 		glfwSwapBuffers(window);
 	}
 
