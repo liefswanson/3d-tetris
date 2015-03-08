@@ -289,8 +289,8 @@ Board::render() {
 				// 							  gridMap.map((GLfloat)row),
 				// 							  0.f);
 				current->location = glm::vec3(
-					gridMap.map((GLfloat)col),
-					gridMap.map((GLfloat)row),
+					colMap.map((GLfloat)col),
+					rowMap.map((GLfloat)row),
 					0.f);
 				current->render();
 			}

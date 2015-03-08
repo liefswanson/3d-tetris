@@ -7,6 +7,10 @@
 
 #include "RangeMap.hpp"
 
+extern GLfloat distance;
+extern GLfloat angle;
+extern GLfloat orbitSpeed;
+
 extern GLuint HEIGHT;
 extern GLuint WIDTH;
 
@@ -16,7 +20,8 @@ extern uint ROWS;
 extern uint COLS;
 extern uint SROWS;
 
-extern RangeMap gridMap;
+extern RangeMap colMap;
+extern RangeMap rowMap;
 
 extern glm::vec3 origin;
 

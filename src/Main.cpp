@@ -61,17 +61,44 @@ main(int argc, char *argv[]) {
 	
 	Tile::init();
     // glm::vec3(2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS, 2.f/(GLfloat)COLS)
-	Camera cam = Camera(glm::vec3(0.f, 1.f, 0.f),
+	Camera cam = Camera(glm::vec3(0.f, -1.f, 0.f),
 						glm::vec3(), // this need not be initialized it is updated every turn
 						origin, 
 						45.f, (GLfloat)WIDTH/(GLfloat)HEIGHT,
-						0.1f, 100.f);
+						0.1f, 1000.f);
 	
 	cam.addProgram(Tile::program);
 
 	Board board (ROWS, COLS, SROWS);
-	board.makeAt(10, 5, PEAR);
-	board.makeAt(10, 6, ORANGE);
+	board.makeAt(0, 0, APPLE);
+	board.makeAt(1, 1, APPLE);
+	board.makeAt(2, 2, APPLE);
+	board.makeAt(3, 3, APPLE);
+	board.makeAt(4, 4, APPLE);
+	board.makeAt(5, 5, APPLE);
+	board.makeAt(6, 6, APPLE);
+	board.makeAt(7, 7, APPLE);
+	board.makeAt(8, 8, APPLE);
+	board.makeAt(9, 9, APPLE);
+	
+	board.makeAt(10, 0, ORANGE);
+	board.makeAt(11, 1, ORANGE);
+	board.makeAt(12, 2, ORANGE);
+	board.makeAt(13, 3, ORANGE);
+	board.makeAt(14, 4, ORANGE);
+	board.makeAt(15, 5, ORANGE);
+	board.makeAt(16, 6, ORANGE);
+	board.makeAt(17, 7, ORANGE);
+	board.makeAt(18, 8, ORANGE);
+	board.makeAt(19, 9, ORANGE);
+
+	board.makeAt(20, 0, PEAR);
+	board.makeAt(21, 1, PEAR);
+	board.makeAt(22, 2, PEAR);
+	board.makeAt(23, 3, PEAR);
+	board.makeAt(24, 4, PEAR);
+
+	board.debugDiff(board.board);
 
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
@@ -83,7 +110,7 @@ main(int argc, char *argv[]) {
 
 		cam.location = glm::vec3(distance  * sin(-glm::radians(angle)),
 								 origin.y,
-								 -distance * cos(-glm::radians(angle)));
+								 distance * cos(-glm::radians(angle)));
 		cam.Update();
 
 		board.render();
