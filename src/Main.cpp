@@ -47,6 +47,7 @@ actOnKeys(){
 	}
 
 	if(keys[GLFW_KEY_UP]){
+		// TODO limit by delta time
 		piece->rotC();
 	}
 
