@@ -17,8 +17,15 @@ glm::vec3 origin  = glm::vec3(0.f, 0.f, 0.f);
 
 GLfloat BG = 0.082f;
 
-RangeMap colMap = RangeMap(0.f, (GLfloat)COLS-1, -(GLfloat)COLS /2, (GLfloat)COLS /2);
-RangeMap rowMap = RangeMap((GLfloat)SROWS +1, (GLfloat)ROWS-1.f/ASPECT_RATIO, -(GLfloat)(ROWS-SROWS) /2, (GLfloat)(ROWS-SROWS) /2);
+GLfloat LEFT   = -(GLfloat)(COLS) /2;
+GLfloat RIGHT  =  (GLfloat)(COLS) /2;
+GLfloat TOP    =  (GLfloat)(ROWS-SROWS) /2;
+GLfloat BOTTOM = -(GLfloat)(ROWS-SROWS) /2;
+
+RangeMap colMap = RangeMap(0.f,                            (GLfloat)COLS-1,
+						   LEFT,   RIGHT);
+RangeMap rowMap = RangeMap((GLfloat)ROWS-1.f/ASPECT_RATIO, (GLfloat)SROWS +1,
+						   BOTTOM, TOP);
 
 
 glm::vec3 colors[] {

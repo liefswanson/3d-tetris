@@ -2,14 +2,22 @@
 
 void
 key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
         glfwSetWindowShouldClose(window, GL_TRUE);
-	if (key >= 0 && key < 1024)
-    {
-        if (action == GLFW_PRESS)
+	}else if(key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+		if(piece->release()){
+			piece->clear();
+			piece->makePiece();
+			piece->debug();
+		}
+	} else if (key >= 0 && key < 1024) {
+        if (action == GLFW_PRESS){
             keys[key] = true;
-        else if (action == GLFW_RELEASE)
+			
+		}
+        else if (action == GLFW_RELEASE) {
             keys[key] = false;
+		}
     }
 }
 
@@ -24,6 +32,11 @@ void updateTime(){
 	timeLastFrame          = timeThisFrame;
 }
 
+GLfloat x = 0;
+GLfloat y = 0;
+
+GLfloat moveSpeed = 10.f;
+
 void
 actOnKeys(){
 	if(keys[GLFW_KEY_LEFT]){
@@ -32,10 +45,28 @@ actOnKeys(){
 	if(keys[GLFW_KEY_RIGHT]) {
 		angle += orbitSpeed *deltaTime;
 	}
+
+	if(keys[GLFW_KEY_UP]){
+		piece->rotC();
+	}
+
+	// wasd
+	if(keys[GLFW_KEY_W]) {
+		y += moveSpeed *deltaTime;
+	}
+	if(keys[GLFW_KEY_A]){
+		x -= moveSpeed *deltaTime;
+	}
+	if(keys[GLFW_KEY_S]){
+		y -= moveSpeed *deltaTime;
+	}
+	if(keys[GLFW_KEY_D]) {
+		x += moveSpeed *deltaTime;
+	}
 }
 
 
-//---------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 
 int
 main(int argc, char *argv[]) {
@@ -61,7 +92,7 @@ main(int argc, char *argv[]) {
 	
 	Tile::init(glm::vec3(.8f, .8f, .8f));
 
-	Camera cam = Camera(glm::vec3(0.f, -1.f, 0.f),
+	Camera cam = Camera(glm::vec3(0.f, 1.f, 0.f),
 						glm::vec3(), // this need not be initialized it is updated every turn
 						origin, 
 						45.f, (GLfloat)WIDTH/(GLfloat)HEIGHT,
@@ -69,20 +100,23 @@ main(int argc, char *argv[]) {
 	
 	cam.addProgram(Tile::program);
 
-	Board board (ROWS, COLS, SROWS);
-	for (uint i = SROWS; i < ROWS; i++) {
-		board.makeAt(i, COLS-1, PEAR);
-		board.makeAt(i, 0, APPLE);
-	}
-
-	for (uint i = 1; i < COLS -1; i++) {
-		board.makeAt(SROWS, i, GRAPE);
-		board.makeAt(ROWS-1, i, BANANA);
-	}
+	board = new Board(ROWS, COLS, SROWS);
+	piece = new Piece(board);
 	
-	board.debugDiff(board.board);
+	// for (uint i = SROWS; i < ROWS; i++) {
+	// 	board.makeAt(i, COLS-1, PEAR);
+	// 	board.makeAt(i, 0, APPLE);
+	// }
 
+	// for (uint i = 1; i < COLS -1; i++) {
+	// 	board.makeAt(SROWS, i, GRAPE);
+	// 	board.makeAt(ROWS-1, i, BANANA);
+	// }
 	
+	//board.debugDiff(board.board);
+
+	piece->makePiece();
+	//piece.debug();
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
 		glfwPollEvents();
@@ -93,10 +127,16 @@ main(int argc, char *argv[]) {
 
 		cam.location = glm::vec3(distance  * sin(-glm::radians(angle)),
 								 origin.y,
-								 distance * cos(-glm::radians(angle)));
+								 -distance * cos(-glm::radians(angle)));
 		cam.Update();
 
-		board.render();
+		if(piece->canRelocate(x,y)){
+			piece->applyMove();
+		} else {
+			piece->discardMove();
+		}
+		board->render();
+		piece->render();
 		glfwSwapBuffers(window);
 	}
 

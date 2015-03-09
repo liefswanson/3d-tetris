@@ -11,6 +11,7 @@
 #include "Camera.hpp"
 #include "Tile.hpp"
 #include "Board.hpp"
+#include "Piece.hpp"
 #include "Settings.hpp"
 
 bool keys[1024];
@@ -19,3 +20,5 @@ GLfloat deltaTime     = 0.f;
 GLfloat timeLastFrame = 0.f;
 GLfloat timeThisFrame = 0.f;
 
+Piece* piece = NULL;
+Board* board = NULL;

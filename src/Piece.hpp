@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 
 #include <cmath>
+#include <cfloat>
+#include <utility>
 #include "Board.hpp"
 #include "Settings.hpp"
 
@@ -22,37 +24,35 @@ public:
 	Piece(Board* board);
 	~Piece();
 
-	void makePiece(GLfloat x, GLfloat y);
+	void makePiece();
+	void clear();
 
 	void shuffleL();
 	void shuffleR();
 
-	// FIXME not sure which to use,
-	// but if i make the location piece center it shouldnt be needed? 
-	bool canRotW();
-	bool canRotC();
-
 	void rotW();
 	void rotC();
 	
-	bool canMove(GLfloat x, GLfloat y);
+	bool canMove    (GLfloat x, GLfloat y);
+	bool canRelocate(GLfloat x, GLfloat y);
 	void applyMove();
 	void discardMove();	
 
-	void release();
+	bool release();
 
 	void render();
+
+	void debug();
 
 	
 private:
 	const static uint PIECE_SIZE = 5;
 	const static uint TILES_PER_BLOCK = 4;
+
+	static RangeMap pieceMap;
 	
 	glm::vec3 location;
 	glm::vec3 checkLocation;
-
-	GLfloat top,  bottom,
-		    left, right;
 
 	Tile* piece[PIECE_SIZE][PIECE_SIZE] = {};
 	Tile* check[PIECE_SIZE][PIECE_SIZE] = {};
@@ -62,7 +62,7 @@ private:
 	Board* board;
 
 	uint shape;
-	uint rotation;
+	bool rotated;
 
 	static uint randFruit();
 	static uint randShape();
@@ -72,10 +72,20 @@ private:
 	void makeL();
 	void makeS();
 
+	void rotWHelper();
+	void rotCHelper();
+	
+	uint findTop();
+	uint findLeft();
+	uint findRight();
+	uint findBottom();
+	bool canReleaseAt(uint row, uint col, uint top, uint left);
+	void releaseAt(uint row, uint col, uint top, uint left);
+	GLfloat distTo(uint row, uint col, uint top, uint left);
+
 	// sync Piece to Check 
 	void syncPiece();
 	// sync Check to Piece
 	void syncCheck();
 
-	void clear();
 };

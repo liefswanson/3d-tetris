@@ -250,22 +250,22 @@ Board::debugDiff(Tile** diff){
 			if(temp != NULL) {
 				switch(temp->fruit()){
 				case APPLE:
-					std::cout << Term::IRed << '+';
+					std::cout << Term::IRed;
 					break;
 				case BANANA:
-					std::cout << Term::IYellow << '+';
+					std::cout << Term::IYellow;
 					break;
 				case GRAPE:
-					std::cout << Term::IPurple << '+';
+					std::cout << Term::IPurple;
 					break;
 				case PEAR:
-					std::cout << Term::IGreen << '+';
+					std::cout << Term::IGreen;
 					break;
 				case ORANGE:
-					std::cout << Term::Yellow << '+';
+					std::cout << Term::Yellow;
 					break;
 				}
-				std::cout << Term::Reset;
+				std::cout << '+' << Term::Reset;
 			} else {
 				std::cout << '-';
 			}
@@ -284,14 +284,9 @@ Board::render() {
 		for (GLuint col = 0; col < cols; ++col) {
 			Tile* current = this->at(row, col);
 			if (current != NULL) {
-				//TODO doesn't actually render
-				// current->location = glm::vec3(gridMap.map((GLfloat)col),
-				// 							  gridMap.map((GLfloat)row),
-				// 							  0.f);
-				current->location = glm::vec3(
-					colMap.map((GLfloat)col),
-					rowMap.map((GLfloat)row),
-					0.f);
+				current->location = glm::vec3(colMap.map((GLfloat)col),
+											  rowMap.map((GLfloat)row),
+											  0.f);
 				current->render();
 			}
 		}
@@ -303,7 +298,7 @@ Board::clear() {
 	for (GLuint i = 0; i < cols*(rows); ++i) {
 		if (board[i] != NULL){
 			delete board[i];
-			board[i] = NULL;
+			board[i]  = NULL;
 		}
 	}
 }
