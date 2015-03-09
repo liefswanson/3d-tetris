@@ -9,6 +9,7 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 			piece->clear();
 			piece->makePiece();
 			piece->debug();
+			board->debugDiff(board->board);
 		}
 	} else if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS){
@@ -52,17 +53,38 @@ actOnKeys(){
 	}
 
 	// wasd
+	auto temp = moveSpeed *deltaTime;
 	if(keys[GLFW_KEY_W]) {
-		y += moveSpeed *deltaTime;
+		if(piece->canRelocate(x,y +temp)){
+			piece->applyMove();
+			y += temp;
+		} else {
+			piece->discardMove();
+		}
 	}
 	if(keys[GLFW_KEY_A]){
-		x -= moveSpeed *deltaTime;
+		if(piece->canRelocate(x -temp,y)){
+			piece->applyMove();
+			x -= temp;
+		} else {
+			piece->discardMove();
+		}
 	}
 	if(keys[GLFW_KEY_S]){
-		y -= moveSpeed *deltaTime;
+		if(piece->canRelocate(x,y -temp)){
+			piece->applyMove();
+			y -= temp;
+		} else {
+			piece->discardMove();
+		}
 	}
 	if(keys[GLFW_KEY_D]) {
-		x += moveSpeed *deltaTime;
+		if(piece->canRelocate(x +temp,y)){
+			piece->applyMove();
+			x += temp;
+		} else {
+			piece->discardMove();
+		}
 	}
 }
 
@@ -118,6 +140,8 @@ main(int argc, char *argv[]) {
 
 	piece->makePiece();
 	//piece.debug();
+	piece->canRelocate(0.f, 0.f);
+	piece->applyMove();
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
 		glfwPollEvents();
@@ -131,11 +155,6 @@ main(int argc, char *argv[]) {
 								 -distance * cos(-glm::radians(angle)));
 		cam.Update();
 
-		if(piece->canRelocate(x,y)){
-			piece->applyMove();
-		} else {
-			piece->discardMove();
-		}
 		board->render();
 		piece->render();
 		glfwSwapBuffers(window);
