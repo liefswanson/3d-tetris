@@ -160,7 +160,10 @@ main(int argc, char *argv[]) {
 		glfwSwapBuffers(window);
 	}
 
+	cam.removeProgram(Tile::program);
 	Tile::clean();
+	delete board;
+	delete piece;
 	
 	glfwTerminate();
 	return 0;
