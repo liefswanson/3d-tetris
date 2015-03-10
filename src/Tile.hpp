@@ -20,13 +20,11 @@ public:
 	static void init(glm::vec3 size = glm::vec3(1.f, 1.f, 1.f));
 	static void clean();
 
-	static GLuint VAO, VBO, EBO;
 	static GLuint program;
 
 private:
 	uint _fruit;
 
+	static GLuint VAO, VBO, EBO;
 	static const GLubyte order[];
-
-	static bool intitialized;
 };

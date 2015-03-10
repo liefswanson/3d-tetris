@@ -1,4 +1,5 @@
-libs   = -lGLEW -lglfw -lGL -lX11 -lpthread #-lXrandr -lXi
+libs   = -lGLEW -lGL -lX11 -lpthread -lXrandr -lXi -lXxf86vm -lXcursor -lXinerama
+inc    = ../include/GLFW/libglfw3.a
 tLibs  = -lgtest
 cflags = -Wall -g
 std    = -std=c++11
@@ -10,7 +11,7 @@ tests  = $(srcs:.cpp=.test) Array2D.test
 objs   = $(srcs:.cpp=.o)
 
 all: $(objs)
-	cd obj/; $(cc) $(std) $(libs) $(objs) -o ../bin/$(app); cd ../
+	cd obj/; $(cc) $(std) $(libs) $(objs) $(inc) -o ../bin/$(app) ; cd ../
 
 run: all
 	bin/$(app)
