@@ -87,29 +87,24 @@ Piece::shuffleR(){
 
 bool
 Piece::canMove(GLfloat x, GLfloat y){
-	auto temp =
-		location.x + x >= LEFT &&
-		location.x + x <= RIGHT &&
-		location.y + y >= BOTTOM &&
-		location.y + y <= TOP;
 	checkLocation = glm::vec3(location.x + x,
 							  location.y + y,
 							  location.z);
 	// std::cout << Term::INFO << location.x << ',' << location.y << ',' << location.z << std::endl;
-	return temp;
+	auto row = round(rowMap.mapBack(checkLocation.y));
+	auto col = round(colMap.mapBack(checkLocation.x));
+	return onBoard(row, col);
 
 }
 
 bool
 Piece::canRelocate(GLfloat x, GLfloat y) {
-	auto temp =
-		x >= LEFT  &&
-		x <= RIGHT &&
-		y >= BOTTOM &&
-		y <= TOP;
+
 	checkLocation = glm::vec3(x, y, location.z);
 	// std::cout << Term::INFO << location.x << ',' << location.y << ',' << location.z << std::endl;
-	return temp;
+	auto row = round(rowMap.mapBack(checkLocation.y));
+	auto col = round(colMap.mapBack(checkLocation.x));
+	return onBoard(row, col);
 }
 
 uint
@@ -170,6 +165,63 @@ Piece::discardMove(){
 	syncCheck();
 }
 
+
+bool
+Piece::properCanRelease(){
+	auto drow = round(rowMap.mapBack(location.y));
+	auto dcol = round(colMap.mapBack(location.x));
+	return properCanReleaseAt(drow,dcol);
+}
+
+bool
+Piece::properCanReleaseAt(uint row, uint col){
+	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
+		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
+			if(!board->on(row +prow, col +pcol) ||
+			   board->at(row +prow, col +pcol) != NULL){
+				if(piece[prow][pcol] != NULL){
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+bool
+Piece::onBoard(uint row, uint col){
+	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
+		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
+			if(piece[prow][pcol] != NULL &&
+			   !board->on(row +prow, col +pcol)){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void
+Piece::properReleaseAt(uint row, uint col){
+	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
+		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
+			if(board->on(row +prow, col +pcol) &&
+			   board->at(row +prow, col +pcol) == NULL) {
+				board->set(row +prow, col +pcol, piece[prow][pcol]);
+			}
+		}
+	}
+}
+
+void
+Piece::properRelease(){
+	auto drow = round(rowMap.mapBack(location.y));
+	auto dcol = round(colMap.mapBack(location.x));
+	properReleaseAt(drow,dcol);
+}
+
+// FIXME does not follow project spec
+// need to replace with correct implementation
 bool
 Piece::release(){
 	auto top  = findTop();
@@ -237,7 +289,6 @@ Piece::distTo(uint row, uint col, uint top, uint left){
 	return sqrt(dx*dx + dy*dy);
 }
 
-// TODO set location somehow
 void
 Piece::makePiece(){
 	this->clear();
@@ -365,15 +416,46 @@ Piece::clear(){
 
 void
 Piece::render() {
+	clearCollisionMatrix();
+	generateCollisionMatrix();
+
 	for (GLuint row = 0; row < PIECE_SIZE; ++row) {
 		for (GLuint col = 0; col < PIECE_SIZE; ++col) {
 			auto current = piece[row][col];
 			if (current != NULL) {
-				current->location = glm::vec3(pieceMap.map((GLfloat)col) + this->location.x,
-											  -pieceMap.map((GLfloat)row) + this->location.y,
+
+				current->colliding = collideMatrix[row][col];
+				current->location  = glm::vec3((GLfloat)col + this->location.x,
+											  -(GLfloat)row + this->location.y,
 											  location.z);
 				current->render();
+				current->colliding = false;
 			}
+		}
+	}
+}
+
+void
+Piece::generateCollisionMatrix(){
+	auto row = round(rowMap.mapBack(location.y));
+	auto col = round(colMap.mapBack(location.x));
+	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
+		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
+			if(!board->on(row +prow, col +pcol) ||
+			   board->at(row +prow, col +pcol) != NULL){
+				if(piece[prow][pcol] != NULL){
+					collideMatrix[prow][pcol] = true;
+				}
+			}
+		}
+	}
+}
+
+void
+Piece::clearCollisionMatrix(){
+	for (GLuint row = 0; row < PIECE_SIZE; ++row) {
+		for (GLuint col = 0; col < PIECE_SIZE; ++col) {
+			collideMatrix[row][col] = false;
 		}
 	}
 }

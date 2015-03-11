@@ -39,6 +39,9 @@ public:
 	void applyMove();
 	void discardMove();	
 
+	bool properCanRelease();
+	void properRelease();
+	
 	bool release();
 
 	void render();
@@ -57,7 +60,8 @@ private:
 
 	Tile* piece[PIECE_SIZE][PIECE_SIZE] = {};
 	Tile* check[PIECE_SIZE][PIECE_SIZE] = {};
-
+	bool collideMatrix[PIECE_SIZE][PIECE_SIZE] = {};
+	
 	Tile* TileOrder[TILES_PER_BLOCK] = {};
 
 	Board* board;
@@ -75,14 +79,24 @@ private:
 
 	void rotWHelper();
 	void rotCHelper();
+
+	bool onBoard(uint row, uint col);
 	
 	uint findTop();
 	uint findLeft();
 	uint findRight();
 	uint findBottom();
+	bool properCanReleaseAt(uint row, uint col);
+	void properReleaseAt   (uint row, uint col);
+
+	void generateCollisionMatrix();
+	void clearCollisionMatrix();
+
+	// deprecated as they do not follow the spec
+	// they are also too complex
 	bool canReleaseAt(uint row, uint col, uint top, uint left);
-	void releaseAt(uint row, uint col, uint top, uint left);
-	GLfloat distTo(uint row, uint col, uint top, uint left);
+	void releaseAt   (uint row, uint col, uint top, uint left);
+	GLfloat distTo   (uint row, uint col, uint top, uint left);
 
 	// sync Piece to Check 
 	void syncPiece();

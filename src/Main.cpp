@@ -5,7 +5,8 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
         glfwSetWindowShouldClose(window, GL_TRUE);
 	}else if(key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-		if(piece->release()){
+		if(piece->properCanRelease()){
+			piece->properRelease();
 			piece->clear();
 			piece->makePiece();
 			piece->debug();
@@ -53,24 +54,44 @@ actOnKeys(){
 	}
 
 	if(keys[GLFW_KEY_J]){
-		auto pos = arm->checkRotateShoulder(5.f);
-		piece->canRelocate(pos.x, pos.y);
-		piece->applyMove();
+		auto pos = arm->checkRotateShoulder(15.f *deltaTime);
+		if (piece->canRelocate(pos.x, pos.y)) {
+			arm->applyMove();
+			piece->applyMove();	
+		} else {
+			arm->discardMove();
+			piece->discardMove();	
+		}
 	}
 	if(keys[GLFW_KEY_L]) {
-		auto pos = arm->checkRotateShoulder(-5.f);
-		piece->canRelocate(pos.x, pos.y);
-		piece->applyMove();
+		auto pos = arm->checkRotateShoulder(-15.f *deltaTime);
+		if (piece->canRelocate(pos.x, pos.y)) {
+			arm->applyMove();
+			piece->applyMove();	
+		} else {
+			arm->discardMove();
+			piece->discardMove();	
+		}
 	}
 	if(keys[GLFW_KEY_K]){
-		auto pos = arm->checkRotateElbow(5.f);
-		piece->canRelocate(pos.x, pos.y);
-		piece->applyMove();
+		auto pos = arm->checkRotateElbow(15.f *deltaTime);
+		if (piece->canRelocate(pos.x, pos.y)) {
+			arm->applyMove();
+			piece->applyMove();	
+		} else {
+			arm->discardMove();
+			piece->discardMove();	
+		}
 	}
 	if(keys[GLFW_KEY_I]) {
-		auto pos = arm->checkRotateElbow(-5.f);
-		piece->canRelocate(pos.x, pos.y);
-		piece->applyMove();
+		auto pos = arm->checkRotateElbow(-15.f *deltaTime);
+		if (piece->canRelocate(pos.x, pos.y)) {
+			arm->applyMove();
+			piece->applyMove();	
+		} else {
+			arm->discardMove();
+			piece->discardMove();	
+		}
 	}
 
 	// wasd
@@ -145,10 +166,12 @@ main(int argc, char *argv[]) {
 
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
-	
-	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 10.f, piece);
+	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 12.5f, piece);
 
-	auto temp = arm->checkRotateElbow(0);
+	arm->checkRotateShoulder(115.f);
+	arm->applyMove();
+	auto temp = arm->checkRotateElbow(-15.f);
+	arm->applyMove();
 
 	piece->makePiece();
 	piece->canRelocate(temp.x, temp.y);
@@ -159,8 +182,6 @@ main(int argc, char *argv[]) {
 
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
-		glfwPollEvents();
-		actOnKeys();
 		
 		glClearColor(BG, BG, BG, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -174,6 +195,9 @@ main(int argc, char *argv[]) {
 		piece->render();
 		arm->render();
 		glfwSwapBuffers(window);
+
+		glfwPollEvents();
+		actOnKeys();
 	}
 
 	cam.removeProgram(Tile::program);

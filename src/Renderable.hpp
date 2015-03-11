@@ -16,9 +16,9 @@ public:
 				glm::vec3 color    = glm::vec3(),
 				glm::vec3 location = glm::vec3(),
 				GLfloat rotation = 0);
-	~Renderable();
+	virtual ~Renderable();
 	
-	void render();
+	virtual void render();
 
 private:
 	GLuint VAO;

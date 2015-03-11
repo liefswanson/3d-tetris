@@ -58,12 +58,25 @@ Tile::Tile(uint fruit)
 	: Renderable(VAO, sizeof(order) /sizeof(GLubyte), program,
 				 GL_TRIANGLES,
 				 colors[fruit]) {
+	colliding = true;
 	_fruit = fruit;
 }
 
-Tile::~Tile(){}
+Tile::~Tile(){
+	Renderable::~Renderable();
+}
 
 uint
 Tile::fruit() {
 	return _fruit;
+}
+
+void
+Tile::render(){
+	if(colliding) {
+		color = collideColor;
+	} else {
+		color = colors[_fruit];
+	}
+	Renderable::render();
 }

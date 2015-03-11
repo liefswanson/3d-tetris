@@ -13,10 +13,13 @@
 class Tile : public Renderable {
 public:
 	Tile(uint fruit);
-	~Tile();
+	~Tile() override;
 
 	uint fruit();
+	bool colliding;
 
+	void render() override;
+	
 	static void init(glm::vec3 size = glm::vec3(1.f, 1.f, 1.f));
 	static void clean();
 

@@ -29,6 +29,8 @@ extern RangeMap rowMap;
 extern glm::vec3 origin;
 
 extern GLfloat BG;
+extern glm::vec3 collideColor;
+extern glm::vec3 gridColor;
 extern glm::vec3 colors[];
 
 enum Fruits {

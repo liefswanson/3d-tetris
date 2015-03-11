@@ -29,15 +29,20 @@ private:
 	Renderable* forearm;
 
 	glm::vec3   shoulder;
-	GLfloat     shoulderRotation;
-	glm::vec3   elbow;
-	GLfloat     elbowRotation;
 
-	glm::vec3   shoulderCheck;
+	GLfloat     shoulderRotation;
 	GLfloat     shoulderRotationCheck;
-	glm::vec3   elbowCheck;
+
+	glm::vec3   elbowDelta;
+	glm::vec3   elbowDeltaCheck;
+
+	GLfloat     elbowRotation;
 	GLfloat     elbowRotationCheck;
 
+	glm::vec3   handDelta;     
+	glm::vec3   handDeltaCheck;
+	
+	
 	GLfloat     sectionLength;
 
 	void syncCheck();
