@@ -1,7 +1,7 @@
 #include "Main.hpp"
 
 void
-key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
         glfwSetWindowShouldClose(window, GL_TRUE);
 	}else if(key == GLFW_KEY_SPACE && action == GLFW_PRESS){
@@ -43,10 +43,23 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 void
 key_handler(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	// handle modifiers
-	shift = (~(mods ^ GLFW_MOD_SHIFT))   >> 0;
-	ctrl  = (~(mods ^ GLFW_MOD_CONTROL)) >> 1;
-	alt   = (~(mods ^ GLFW_MOD_ALT))     >> 2;
-	super = (~(mods ^ GLFW_MOD_SUPER))   >> 3;
+	shift = (mods & GLFW_MOD_SHIFT)   == GLFW_MOD_SHIFT;
+	ctrl  = (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL;
+	alt   = (mods & GLFW_MOD_ALT)     == GLFW_MOD_ALT;
+	super = (mods & GLFW_MOD_SUPER)   == GLFW_MOD_SUPER;
+
+	if (shift) {
+		std::cout << "shift" << std::endl;
+	}
+	if (ctrl) {
+		std::cout << "ctrl" << std::endl;
+	}
+	if (alt) {
+		std::cout << "alt" << std::endl;
+	}
+	if (super) {
+		std::cout << "super" << std::endl;
+	}
 	
 	if(action == GLFW_PRESS){
 		switch (key) {
