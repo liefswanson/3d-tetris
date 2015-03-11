@@ -117,6 +117,27 @@ Arm::checkRotateElbow(GLfloat theta) {
 					 shoulder.y + elbowDeltaCheck.y + handDeltaCheck.y);
 }
 
+glm::vec2
+Arm::checkRepositionShoulder(GLfloat theta) {
+	shoulderRotationCheck = glm::radians(theta);
+	elbowDeltaCheck.x = cos(shoulderRotationCheck)*sectionLength;
+	elbowDeltaCheck.y = sin(shoulderRotationCheck)*sectionLength;
+	elbowDeltaCheck.z = 0;
+	
+	return checkRotateElbow(0);
+}
+
+glm::vec2
+Arm::checkRepositienElbow(GLfloat theta) {
+	elbowRotationCheck = glm::radians(theta);
+	handDeltaCheck.x = cos(elbowRotationCheck)*sectionLength;
+	handDeltaCheck.y = sin(elbowRotationCheck)*sectionLength;
+	handDeltaCheck.z = 0;
+
+	return glm::vec2(shoulder.x + elbowDeltaCheck.x + handDeltaCheck.x,
+					 shoulder.y + elbowDeltaCheck.y + handDeltaCheck.y);
+}
+
 void
 Arm::syncArm(){
 	shoulderRotation  = shoulderRotationCheck;

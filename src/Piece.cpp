@@ -193,7 +193,7 @@ Piece::onBoard(uint row, uint col){
 	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
 		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
 			if(piece[prow][pcol] != NULL &&
-			   !board->on(row +prow, col +pcol)){
+			   (!board->on(row +prow, col +pcol) || row < board->SpawnRows())){
 				return false;
 			}
 		}

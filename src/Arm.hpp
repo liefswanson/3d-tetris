@@ -57,6 +57,9 @@ public:
 
 	glm::vec2 checkRotateShoulder(GLfloat theta);
 	glm::vec2 checkRotateElbow   (GLfloat theta);
+
+	glm::vec2 checkRepositionShoulder(GLfloat theta);
+	glm::vec2 checkRepositienElbow   (GLfloat theta);
 	
 	void applyMove();
 	void discardMove();

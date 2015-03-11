@@ -9,6 +9,13 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 			piece->properRelease();
 			piece->clear();
 			piece->makePiece();
+			arm->checkRepositionShoulder(115.f);
+			arm->applyMove();
+			auto temp = arm->checkRepositienElbow(-15.f);
+			arm->applyMove();
+			piece->makePiece();
+			piece->canRelocate(temp.x, temp.y);
+			piece->applyMove();
 			piece->debug();
 			board->debugDiff(board->board);
 		}
@@ -166,11 +173,11 @@ main(int argc, char *argv[]) {
 
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
-	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 12.5f, piece);
+	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 13.f, piece);
 
-	arm->checkRotateShoulder(115.f);
+	arm->checkRepositionShoulder(115.f);
 	arm->applyMove();
-	auto temp = arm->checkRotateElbow(-15.f);
+	auto temp = arm->checkRepositienElbow(-15.f);
 	arm->applyMove();
 
 	piece->makePiece();
