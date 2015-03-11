@@ -1,8 +1,9 @@
 #include "Settings.hpp"
 
-GLfloat distance      = 35.f;
-GLfloat angle         = 0.f;
-GLfloat orbitSpeed    = 20.f;
+GLfloat distance       = 35.f;
+GLfloat angle          = 0.f;
+GLfloat orbitSpeed     = 20.f;
+GLfloat rotateTimerMax = 0.05f;
 
 GLuint HEIGHT = 800;
 GLuint WIDTH  = HEIGHT /2;
@@ -11,7 +12,7 @@ GLfloat ASPECT_RATIO = (GLfloat)WIDTH /(GLfloat)HEIGHT;
 
 uint ROWS  = 25;
 uint COLS  = 10;
-uint SROWS = 5;
+uint SROWS = 0;
 
 glm::vec3 origin  = glm::vec3(0.f, 0.f, 0.f);
 

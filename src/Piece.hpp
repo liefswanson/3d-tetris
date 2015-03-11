@@ -33,7 +33,10 @@ public:
 
 	void rotW();
 	void rotC();
-	
+
+	bool canRotateWishershins();
+	bool canRotateClockwise();
+
 	bool canMove    (GLfloat x, GLfloat y);
 	bool canRelocate(GLfloat x, GLfloat y);
 	void applyMove();
@@ -79,6 +82,8 @@ private:
 
 	void rotWHelper();
 	void rotCHelper();
+	bool canRotateClockwiseHelper();
+	bool canRotateWishershinsHelper();
 
 	bool onBoard     (uint row, uint col);
 	bool checkOnBoard(uint row, uint col);
@@ -103,5 +108,4 @@ private:
 	void syncPiece();
 	// sync Check to Piece
 	void syncCheck();
-
 };

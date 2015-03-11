@@ -19,6 +19,42 @@ Piece::~Piece(){
 	}
 }
 
+bool
+Piece::canRotateClockwise(){
+	if (shape == I_PIECE ||
+		shape == S_PIECE) {
+		if (rotated) {
+			rotCHelper();
+		} else  {
+			rotWHelper();
+		}
+		rotated = !rotated;
+	} else {
+		rotCHelper();
+	}
+	auto row = round(rowMap.mapBack(location.y));
+	auto col = round(colMap.mapBack(location.x));
+	return checkOnBoard(row, col);
+}
+
+bool
+Piece::canRotateWishershins(){
+	if (shape == I_PIECE ||
+		shape == S_PIECE) {
+		if (rotated) {
+			rotWHelper();
+		} else  {
+			rotCHelper();
+		}
+		rotated = !rotated;
+	} else {
+		rotWHelper();
+	}
+	auto row = round(rowMap.mapBack(location.y));
+	auto col = round(colMap.mapBack(location.x));
+	return checkOnBoard(row, col);
+}
+
 void
 Piece::rotW(){
 	if (shape == I_PIECE ||
@@ -32,6 +68,7 @@ Piece::rotW(){
 	} else {
 		rotWHelper();
 	}
+	syncPiece();
 }
 
 void
@@ -47,7 +84,9 @@ Piece::rotC(){
 	} else {
 		rotCHelper();
 	}
+	syncPiece();
 }
+
 
 void
 Piece::rotCHelper(){
@@ -56,7 +95,6 @@ Piece::rotCHelper(){
 			check[row][col] = piece[col][PIECE_SIZE -1 -row];
 		}
 	}
-	syncPiece();
 }
 
 void
@@ -66,7 +104,6 @@ Piece::rotWHelper(){
 			check[row][col] = piece[PIECE_SIZE -1 -col][row];
 		}
 	}
-	syncPiece();
 }
 
 void

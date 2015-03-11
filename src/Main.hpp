@@ -16,10 +16,15 @@
 #include "Settings.hpp"
 
 bool keys[1024];
+bool shift;
+bool ctrl;
+bool alt;
+bool super;
 
 GLfloat deltaTime     = 0.f;
 GLfloat timeLastFrame = 0.f;
 GLfloat timeThisFrame = 0.f;
+GLfloat rotateTimer   = rotateTimerMax;
 
 Piece* piece = NULL;
 Board* board = NULL;

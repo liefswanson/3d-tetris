@@ -22,6 +22,13 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 			piece->debug();
 			board->debugDiff(board->board);
 		}
+	} else if (key == GLFW_KEY_UP &&
+			   (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+		if(piece->canRotateClockwise()) {
+			piece->applyMove();
+		} else {
+			piece->discardMove();
+		}	
 	} else if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS){
             keys[key] = true;
@@ -34,20 +41,61 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 }
 
 void
+key_handler(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	// handle modifiers
+	shift = (~(mods ^ GLFW_MOD_SHIFT))   >> 0;
+	ctrl  = (~(mods ^ GLFW_MOD_CONTROL)) >> 1;
+	alt   = (~(mods ^ GLFW_MOD_ALT))     >> 2;
+	super = (~(mods ^ GLFW_MOD_SUPER))   >> 3;
+	
+	if(action == GLFW_PRESS){
+		switch (key) {
+		case GLFW_KEY_ESCAPE:
+		case GLFW_KEY_Q:
+			break;
+		case GLFW_KEY_R:
+			break;
+		default:
+			break;
+		}
+	}
+	// for custom repeat behaviour
+	if (action == GLFW_PRESS) {
+            keys[key] = true;
+	} else if (action == GLFW_RELEASE) {
+            keys[key] = false;
+	}
+}
+
+void
+actOnSetKeys(){
+	
+}
+
+
+void
 scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	distance -= yoffset;
 }
 
-void updateTime(){
+void
+updateTime(){
 	GLfloat timeThisFrame  = glfwGetTime();
 	deltaTime              = timeThisFrame - timeLastFrame;
 	timeLastFrame          = timeThisFrame;
+}
+
+void
+updateRotateTimer(){
+	rotateTimer -= deltaTime;
 }
 
 GLfloat x = 0;
 GLfloat y = 0;
 
 GLfloat moveSpeed = 10.f;
+
+
 
 void
 actOnKeys(){
@@ -60,7 +108,10 @@ actOnKeys(){
 
 	if(keys[GLFW_KEY_UP]){
 		// TODO limit by delta time
-		piece->rotC();
+		if(rotateTimer <= 0.f) {
+			rotateTimer = rotateTimerMax;
+			
+		}
 	}
 
 	if(keys[GLFW_KEY_J]){
@@ -176,7 +227,7 @@ main(int argc, char *argv[]) {
 
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
-	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 13.f, piece);
+	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 14.4f, piece);
 
 	arm->checkRepositionShoulder(115.f);
 	arm->applyMove();
@@ -192,6 +243,8 @@ main(int argc, char *argv[]) {
 
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
+		updateRotateTimer();
+		
 		
 		glClearColor(BG, BG, BG, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
