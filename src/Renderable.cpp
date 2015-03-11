@@ -4,7 +4,7 @@ Renderable::Renderable(GLuint VAO, GLuint count, GLuint program,
 					   GLuint mode,
 					   glm::vec3 color,
 					   glm::vec3 location,
-					   glm::vec3 rotation){
+					   GLfloat rotation){
 	this->VAO      = VAO;
 	this->count    = count;
 	this->mode     = mode;
@@ -13,7 +13,7 @@ Renderable::Renderable(GLuint VAO, GLuint count, GLuint program,
 	
 	this->color    = color;
 	this->location = location;
-	this->rotation = rotation;
+	this->rotation = glm::radians(rotation);
 }
 
 Renderable::~Renderable(){}
@@ -23,10 +23,9 @@ Renderable::render() {
 	glUseProgram(program);
 
 	GLuint modelLoc = glGetUniformLocation(program, "model");
-	glm::mat4 model;
-	// FIXME cannot rotate
-	// model = glm::rotate   (model, glm::radians(1.f), rotation);
+	glm::mat4 model = glm::mat4();
 	model = glm::translate(model, location);
+	model = glm::rotate   (model, rotation, glm::vec3(0.f, 0.f, 1.f));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	
 	GLuint colorLoc = glGetUniformLocation(program, "rgb");
@@ -35,4 +34,5 @@ Renderable::render() {
 	glBindVertexArray(VAO);
 	glDrawElements(mode, count, GL_UNSIGNED_BYTE, 0);
 	glBindVertexArray(0);
+	glUseProgram(0);
 }

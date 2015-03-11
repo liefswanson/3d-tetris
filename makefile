@@ -6,7 +6,7 @@ std    = -std=c++11
 cc     = clang++
 app    = 3d-tetris.app
 
-srcs   = TermColor.cpp Main.cpp ShaderBuilder.cpp VAOBuilder.cpp Renderable.cpp Camera.cpp Tile.cpp Board.cpp RangeMap.cpp Settings.cpp Piece.cpp # Grid.cpp Arm.cpp
+srcs   = TermColor.cpp Main.cpp ShaderBuilder.cpp VAOBuilder.cpp Renderable.cpp Camera.cpp Tile.cpp Board.cpp RangeMap.cpp Settings.cpp Piece.cpp Arm.cpp # Grid.cpp 
 tests  = $(srcs:.cpp=.test) Array2D.test
 objs   = $(srcs:.cpp=.o)
 

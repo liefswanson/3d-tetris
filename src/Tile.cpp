@@ -31,7 +31,7 @@ Tile::init(glm::vec3 size) {
 		-x,  y, -z, // top left
 		 x,  y, -z, // top right
 		-x, -y, -z, // bottom left
-		 x, -y, -z, // bottom right
+		 x, -y, -z  // bottom right
 	};
 
 	Tile::VAO  = VAOBuilder::buildVAO(Tile::VBO, vertices,    sizeof(vertices)    /sizeof(GLfloat),
@@ -41,10 +41,7 @@ Tile::init(glm::vec3 size) {
 	GLuint frag   = ShaderBuilder::buildShader("shaders/default.frag", GL_FRAGMENT_SHADER);
 	Tile::program = ShaderBuilder::linkProgram(vert, frag);
 
-	glDetachShader(Tile::program, vert);
 	glDeleteShader(vert);
-
-	glDetachShader(Tile::program, frag);
 	glDeleteShader(frag);
 }
 

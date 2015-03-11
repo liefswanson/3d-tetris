@@ -1,6 +1,6 @@
 #include "Settings.hpp"
 
-GLfloat distance      = 22.f;
+GLfloat distance      = 35.f;
 GLfloat angle         = 0.f;
 GLfloat orbitSpeed    = 20.f;
 

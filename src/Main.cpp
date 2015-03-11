@@ -52,6 +52,19 @@ actOnKeys(){
 		piece->rotC();
 	}
 
+	if(keys[GLFW_KEY_J]){
+		arm->canRotateShoulder(5.f);
+	}
+	if(keys[GLFW_KEY_L]) {
+		arm->canRotateShoulder(-5.f);
+	}
+	if(keys[GLFW_KEY_K]){
+		arm->canRotateElbow(5.f);
+	}
+	if(keys[GLFW_KEY_I]) {
+		arm->canRotateElbow(-5.f);
+	}
+
 	// wasd
 	auto temp = moveSpeed *deltaTime;
 	if(keys[GLFW_KEY_W]) {
@@ -124,22 +137,14 @@ main(int argc, char *argv[]) {
 	cam.addProgram(Tile::program);
 
 	board = new Board(ROWS, COLS, SROWS);
-	piece = new Piece(board);
-	
-	// for (uint i = SROWS; i < ROWS; i++) {
-	// 	board.makeAt(i, COLS-1, PEAR);
-	// 	board.makeAt(i, 0, APPLE);
-	// }
+	piece = new Piece(board, 2.f);
 
-	// for (uint i = 1; i < COLS -1; i++) {
-	// 	board.makeAt(SROWS, i, GRAPE);
-	// 	board.makeAt(ROWS-1, i, BANANA);
-	// }
-	
-	//board.debugDiff(board.board);
+	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 10.f, NULL);
 
+
+	cam.addProgram(arm->program);
+	
 	piece->makePiece();
-	//piece.debug();
 	piece->canRelocate(0.f, 0.f);
 	piece->applyMove();
 	while(!glfwWindowShouldClose(window)) {
@@ -150,17 +155,19 @@ main(int argc, char *argv[]) {
 		glClearColor(BG, BG, BG, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cam.location = glm::vec3(distance  * sin(-glm::radians(angle)),
+		cam.location = glm::vec3(distance  *sin(-glm::radians(angle)),
 								 origin.y,
-								 -distance * cos(-glm::radians(angle)));
+								 -distance *cos(-glm::radians(angle)));
 		cam.Update();
 
 		board->render();
 		piece->render();
+		arm->render();
 		glfwSwapBuffers(window);
 	}
 
 	cam.removeProgram(Tile::program);
+	cam.removeProgram(arm->program);
 	Tile::clean();
 	delete board;
 	delete piece;

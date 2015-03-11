@@ -3,10 +3,10 @@
 RangeMap
 Piece::pieceMap = RangeMap(0.f, (GLfloat) PIECE_SIZE-1, -(GLfloat)PIECE_SIZE/2, (GLfloat)PIECE_SIZE/2);
 
-Piece::Piece(Board* board){
+Piece::Piece(Board* board, GLfloat z){
 	srand(time(NULL));
 	this->board = board;
-	location = glm::vec3(+10.f, +10.f, 1.f);
+	location = glm::vec3(+10.f, +10.f, z);
 }
 
 Piece::~Piece(){
@@ -371,7 +371,7 @@ Piece::render() {
 			if (current != NULL) {
 				current->location = glm::vec3(pieceMap.map((GLfloat)col) + this->location.x,
 											  -pieceMap.map((GLfloat)row) + this->location.y,
-											  1.f);
+											  location.z);
 				current->render();
 			}
 		}

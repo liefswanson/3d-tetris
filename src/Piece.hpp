@@ -20,8 +20,9 @@ enum Shapes {
 
 class Piece {
 public:
+	GLfloat z;
 
-	Piece(Board* board);
+	Piece(Board* board, GLfloat z);
 	~Piece();
 
 	void makePiece();

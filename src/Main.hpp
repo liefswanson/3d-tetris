@@ -12,6 +12,7 @@
 #include "Tile.hpp"
 #include "Board.hpp"
 #include "Piece.hpp"
+#include "Arm.hpp"
 #include "Settings.hpp"
 
 bool keys[1024];
@@ -22,3 +23,4 @@ GLfloat timeThisFrame = 0.f;
 
 Piece* piece = NULL;
 Board* board = NULL;
+Arm*   arm   = NULL;

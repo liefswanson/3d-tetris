@@ -38,11 +38,13 @@ Camera::Update(){
 	projection = glm::perspective(fov, aspectRatio, near, far);
 	
 	for(uint i = 0; i < programs.size(); i++){
+		glUseProgram(programs[i]);
 		GLuint temp;
 		temp = glGetUniformLocation(programs[i], "view");
 		glUniformMatrix4fv(temp, 1, GL_FALSE, glm::value_ptr(view));
 
 		temp = glGetUniformLocation(programs[i], "projection");
 		glUniformMatrix4fv(temp, 1, GL_FALSE, glm::value_ptr(projection));
+		glUseProgram(0);
 	}
 }

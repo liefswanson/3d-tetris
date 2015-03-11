@@ -8,6 +8,7 @@ ShaderBuilder::buildShader(const std::string& path, GLuint type){
 
 GLuint
 ShaderBuilder::linkProgram(GLuint vert, GLuint frag){
+	// TODO this was a bad idea fix this function
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vert);
 	glAttachShader(program, frag);

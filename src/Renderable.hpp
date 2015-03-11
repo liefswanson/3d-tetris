@@ -9,13 +9,13 @@ class Renderable {
 public:
 	glm::vec3 color;
 	glm::vec3 location;
-	glm::vec3 rotation;	
+	GLfloat rotation;	
 
 	Renderable (GLuint VAO, GLuint count, GLuint program,
 				GLuint mode,
 				glm::vec3 color    = glm::vec3(),
 				glm::vec3 location = glm::vec3(),
-				glm::vec3 rotation = glm::vec3());
+				GLfloat rotation = 0);
 	~Renderable();
 	
 	void render();
