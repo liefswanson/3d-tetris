@@ -19,10 +19,8 @@ Arm::Arm(glm::vec3 shoulder, GLfloat length, Piece* piece) {
 	glDeleteShader(vert);
 	glDeleteShader(frag);
 
-	this->shoulder = shoulder;
-	sectionLength = length;
-	
 	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+	
 	GLfloat x = 2.f;
 	GLfloat y = 0.5f;
 	GLfloat z = 1.f;
@@ -42,9 +40,6 @@ Arm::Arm(glm::vec3 shoulder, GLfloat length, Piece* piece) {
 
 	mountVAO =VAOBuilder::buildVAO(mountVBO, mountVertices, sizeof(mountVertices)/sizeof(GLfloat),
 								   mountEBO, Arm::order,    sizeof(Arm::order)   /sizeof(GLubyte));
-
-	mount = new Renderable(mountVAO, sizeof(order) /sizeof(GLubyte), program, GL_TRIANGLES,
-						   color,    shoulder);
 	
 	x = 0.5f  *length;
 	y = 0.05f *x;
@@ -66,21 +61,22 @@ Arm::Arm(glm::vec3 shoulder, GLfloat length, Piece* piece) {
 	armVAO  = VAOBuilder::buildVAO(armVBO, armVertices, sizeof(armVertices) /sizeof(GLfloat),
 								   armEBO, Arm::order,  sizeof(Arm::order)  /sizeof(GLubyte));
 
-	bicep = new Renderable(armVAO,  sizeof(order) /sizeof(GLubyte),
-						   program, GL_TRIANGLES, color,
-						   glm::vec3(shoulder.x +cos(0)*sectionLength*.5f,
-									 shoulder.y +sin(0)*sectionLength*.5f,
-									 shoulder.z));
 
-	elbow = glm::vec3(shoulder.x +cos(0)*sectionLength,
-					  shoulder.y +sin(0)*sectionLength,
-					  shoulder.z);
+	this->shoulder = shoulder;
+	sectionLength = length;
+
+	mount   = new Renderable(mountVAO, sizeof(order) /sizeof(GLubyte),
+							 program, GL_TRIANGLES, color, shoulder);
+
+	bicep   = new Renderable(armVAO,  sizeof(order) /sizeof(GLubyte),
+							 program, GL_TRIANGLES, color);
+
 	forearm = new Renderable(armVAO,  sizeof(order) /sizeof(GLubyte),
 							 program, GL_TRIANGLES, color,
 							 elbow);
-						   // glm::vec3(bicep->location.x +cos(0)*sectionLength*.5f,
-						   // 			 bicep->location.y +sin(0)*sectionLength*.5f,
-						   // 			 bicep->location.z));
+	checkRotateShoulder(90.f);
+	checkRotateElbow(0.f);
+	syncCheck();
 }
 
 Arm::~Arm(){
@@ -100,27 +96,63 @@ Arm::~Arm(){
 	delete forearm;
 }
 
-bool
-Arm::canRotateShoulder(GLfloat theta) {
+glm::vec2
+Arm::checkRotateShoulder(GLfloat theta) {
 	bicep->rotation = bicep->rotation +glm::radians(theta);
-	bicep->location = glm::vec3(shoulder.x +cos(bicep->rotation)*sectionLength*.5f,
-	  							shoulder.y +sin(bicep->rotation)*sectionLength*.5f,
+	auto deltaX = cos(bicep->rotation)*sectionLength;
+	auto deltaY = sin(bicep->rotation)*sectionLength;
+	bicep->location = glm::vec3(shoulder.x +deltaX*.5f,
+	  							shoulder.y +deltaY*.5f,
 	  							shoulder.z);
 	
-	elbow = glm::vec3(shoulder.x +cos(bicep->rotation)*sectionLength,
-					  shoulder.y +sin(bicep->rotation)*sectionLength,
+	elbow = glm::vec3(shoulder.x +deltaX,
+					  shoulder.y +deltaY,
 					  shoulder.z);
 	
-	return canRotateElbow(0);
+	return checkRotateElbow(0);
 }
 
-bool
-Arm::canRotateElbow(GLfloat theta) {
+glm::vec2
+Arm::checkRotateElbow(GLfloat theta) {
 	forearm->rotation = forearm->rotation +glm::radians(theta);
-	forearm->location = glm::vec3(elbow.x +cos(forearm->rotation)*sectionLength*.5f,
-								  elbow.y +sin(forearm->rotation)*sectionLength*.5f,
+	auto deltaX = cos(forearm->rotation)*sectionLength;
+	auto deltaY = sin(forearm->rotation)*sectionLength;
+	forearm->location = glm::vec3(elbow.x +deltaX*.5f,
+								  elbow.y +deltaY*.5f,
 								  elbow.z);
-	return true;
+
+	return glm::vec2(elbow.x +deltaX, elbow.y +deltaY);
+}
+
+void
+Arm::syncArm(){
+	shoulder         = shoulderCheck;
+	shoulderRotation = shoulderRotationCheck;
+	elbow            = elbowCheck;
+	elbowRotation    = elbowRotationCheck;
+
+	bicep->rotation   = shoulderRotation;
+	forearm->rotation = elbowRotation;
+
+	
+}
+
+void
+Arm::syncCheck(){
+	shoulderCheck         = shoulder;
+	shoulderRotationCheck = shoulderRotation;
+	elbowCheck            = elbow;
+	elbowRotationCheck    = elbowRotation;
+}
+
+void
+Arm::applyMove(){
+	syncArm();
+}
+
+void
+Arm::discardMove(){
+	syncCheck();
 }
 
 void

@@ -40,6 +40,9 @@ private:
 
 	GLfloat     sectionLength;
 
+	void syncCheck();
+	void syncArm();
+
 public:
 	GLuint program;
 	Piece* piece;
@@ -47,8 +50,9 @@ public:
 	Arm(glm::vec3 shoulder, GLfloat length, Piece* piece);
 	~Arm();
 
-	bool canRotateShoulder(GLfloat theta);
-	bool canRotateElbow(GLfloat theta);
+	glm::vec2 checkRotateShoulder(GLfloat theta);
+	glm::vec2 checkRotateElbow   (GLfloat theta);
+	
 	void applyMove();
 	void discardMove();
 

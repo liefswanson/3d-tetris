@@ -53,16 +53,24 @@ actOnKeys(){
 	}
 
 	if(keys[GLFW_KEY_J]){
-		arm->canRotateShoulder(5.f);
+		auto pos = arm->checkRotateShoulder(5.f);
+		piece->canRelocate(pos.x, pos.y);
+		piece->applyMove();
 	}
 	if(keys[GLFW_KEY_L]) {
-		arm->canRotateShoulder(-5.f);
+		auto pos = arm->checkRotateShoulder(-5.f);
+		piece->canRelocate(pos.x, pos.y);
+		piece->applyMove();
 	}
 	if(keys[GLFW_KEY_K]){
-		arm->canRotateElbow(5.f);
+		auto pos = arm->checkRotateElbow(5.f);
+		piece->canRelocate(pos.x, pos.y);
+		piece->applyMove();
 	}
 	if(keys[GLFW_KEY_I]) {
-		arm->canRotateElbow(-5.f);
+		auto pos = arm->checkRotateElbow(-5.f);
+		piece->canRelocate(pos.x, pos.y);
+		piece->applyMove();
 	}
 
 	// wasd
@@ -134,19 +142,21 @@ main(int argc, char *argv[]) {
 						45.f, (GLfloat)WIDTH/(GLfloat)HEIGHT,
 						0.1f, 1000.f);
 	
-	cam.addProgram(Tile::program);
 
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
-
-	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 10.f, NULL);
-
-
-	cam.addProgram(arm->program);
 	
+	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 10.f, piece);
+
+	auto temp = arm->checkRotateElbow(0);
+
 	piece->makePiece();
-	piece->canRelocate(0.f, 0.f);
+	piece->canRelocate(temp.x, temp.y);
 	piece->applyMove();
+	
+	cam.addProgram(Tile::program);
+	cam.addProgram(arm->program);
+
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
 		glfwPollEvents();
@@ -171,6 +181,7 @@ main(int argc, char *argv[]) {
 	Tile::clean();
 	delete board;
 	delete piece;
+	delete arm;
 	
 	glfwTerminate();
 	return 0;

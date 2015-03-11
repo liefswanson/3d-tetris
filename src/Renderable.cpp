@@ -13,7 +13,7 @@ Renderable::Renderable(GLuint VAO, GLuint count, GLuint program,
 	
 	this->color    = color;
 	this->location = location;
-	this->rotation = glm::radians(rotation);
+	this->rotation = rotation;
 }
 
 Renderable::~Renderable(){}
