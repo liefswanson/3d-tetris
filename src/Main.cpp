@@ -9,13 +9,16 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 			piece->properRelease();
 			piece->clear();
 			piece->makePiece();
+			
 			arm->checkRepositionShoulder(115.f);
 			arm->applyMove();
 			auto temp = arm->checkRepositienElbow(-15.f);
 			arm->applyMove();
+
 			piece->makePiece();
 			piece->canRelocate(temp.x, temp.y);
 			piece->applyMove();
+
 			piece->debug();
 			board->debugDiff(board->board);
 		}

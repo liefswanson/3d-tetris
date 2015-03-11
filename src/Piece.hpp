@@ -80,8 +80,9 @@ private:
 	void rotWHelper();
 	void rotCHelper();
 
-	bool onBoard(uint row, uint col);
-	
+	bool onBoard     (uint row, uint col);
+	bool checkOnBoard(uint row, uint col);
+
 	uint findTop();
 	uint findLeft();
 	uint findRight();

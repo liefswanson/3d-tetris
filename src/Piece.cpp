@@ -201,6 +201,20 @@ Piece::onBoard(uint row, uint col){
 	return true;
 }
 
+// this one is almost entirely a rotate helper function
+bool
+Piece::checkOnBoard(uint row, uint col) {
+	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
+		for(uint pcol = 0; pcol < PIECE_SIZE; pcol++) {
+			if(check[prow][pcol] != NULL &&
+			   (!board->on(row +prow, col +pcol) || row < board->SpawnRows())){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 void
 Piece::properReleaseAt(uint row, uint col){
 	for(uint prow = 0; prow < PIECE_SIZE; prow++ ){
