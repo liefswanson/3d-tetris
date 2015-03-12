@@ -36,9 +36,13 @@ RangeMap colMap = RangeMap(0.f,                            (GLfloat)COLS-1,
 						   LEFT,   RIGHT);
 RangeMap rowMap = RangeMap((GLfloat)ROWS-1.f/ASPECT_RATIO, (GLfloat)SROWS +1,
 						   BOTTOM, TOP);
+
+const glm::vec3 gridHorizontalMeasurements = glm::vec3(0.2, (GLfloat)ROWS-SROWS+1.2, 0.2);
+const glm::vec3 gridVerticalMeasurements   = glm::vec3((GLfloat)COLS+1.2, 0.2, 0.2);
+
 const glm::vec3 armColor     = glm::vec3(0.74f,  0.76f,  0.78f);
 const glm::vec3 collideColor = glm::vec3(0.498f, 0.549f, 0.553f);
-const glm::vec3 gridColor    = glm::vec3(0.608f, 0.349f, 0.714f);
+const glm::vec3 gridColor    = glm::vec3(0.086f, 0.102f, 0.122f);
 const glm::vec3 colors[] {
 	glm::vec3(0.753f, 0.224f, 0.169f), // apple
 	glm::vec3(0.945f, 0.769f, 0.059f), // banana

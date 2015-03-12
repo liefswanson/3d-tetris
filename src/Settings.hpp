@@ -29,6 +29,9 @@ extern const uint ROWS;
 extern const uint COLS;
 extern const uint SROWS;
 
+extern const glm::vec3 gridVerticalMeasurements;
+extern const glm::vec3 gridHorizontalMeasurements;
+
 extern const GLfloat LEFT, RIGHT,
 	                 TOP,  BOTTOM;
 

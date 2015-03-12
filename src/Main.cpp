@@ -1,6 +1,22 @@
 #include "Main.hpp"
 
 void
+resetHandler(){
+	board->clear();
+	piece->destroyPiece();
+	piece->makePiece();
+			
+	arm->checkRepositionShoulder(shoulderDefaultRotation);
+	arm->applyMove();
+	auto temp = arm->checkRepositienElbow(elbowDefaultRotation);
+	arm->applyMove();
+		
+	piece->makePiece();
+	piece->canRelocate(temp.x, temp.y);
+	piece->applyMove();
+}
+
+void
 releasePieceHandler(){
 	if(piece->properCanRelease()){
 		piece->properRelease();
@@ -75,25 +91,17 @@ key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 		switch (key) {
 		case GLFW_KEY_ESCAPE:
 		case GLFW_KEY_Q:
-			glfwWindowShouldClose(window);
+			glfwSetWindowShouldClose(window, GL_TRUE);
 			break;
-		case GLFW_KEY_R: {
-			board->clear();
-			piece->destroyPiece();
-			piece->makePiece();
-			
-			arm->checkRepositionShoulder(shoulderDefaultRotation);
-			arm->applyMove();
-			auto temp = arm->checkRepositienElbow(elbowDefaultRotation);
-			arm->applyMove();
-		
-			piece->makePiece();
-			piece->canRelocate(temp.x, temp.y);
-			piece->applyMove();
+		case GLFW_KEY_R:
+			resetHandler();
 			break;
-		}
 		case GLFW_KEY_SPACE:
-			releasePieceHandler();
+			if (ctrl){
+				piece->shuffleR();
+			} else {
+				releasePieceHandler();
+			}
 			break;
 		default:
 			break;
@@ -196,6 +204,7 @@ main(int argc, char *argv[]) {
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
 	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 14.4f, piece);
+	grid  = new Grid(); 
 
 	arm->checkRepositionShoulder(shoulderDefaultRotation);
 	arm->applyMove();
@@ -208,6 +217,7 @@ main(int argc, char *argv[]) {
 	
 	cam.addProgram(Tile::program);
 	cam.addProgram(arm->program);
+	cam.addProgram(grid->program);
 
 	while(!glfwWindowShouldClose(window)) {
 		updateTime();
@@ -225,6 +235,7 @@ main(int argc, char *argv[]) {
 		board->render();
 		piece->render();
 		arm->render();
+		grid->render();
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
@@ -233,6 +244,8 @@ main(int argc, char *argv[]) {
 
 	cam.removeProgram(Tile::program);
 	cam.removeProgram(arm->program);
+	cam.removeProgram(grid->program);
+
 	Tile::clean();
 	delete board;
 	delete piece;

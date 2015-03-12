@@ -13,6 +13,7 @@
 #include "Board.hpp"
 #include "Piece.hpp"
 #include "Arm.hpp"
+#include "Grid.hpp"
 #include "Settings.hpp"
 
 bool keys[1024];
@@ -31,3 +32,4 @@ GLfloat orbitAngle = initOrbitAngle;
 Piece* piece = NULL;
 Board* board = NULL;
 Arm*   arm   = NULL;
+Grid*  grid  = NULL;
