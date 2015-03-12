@@ -14,6 +14,11 @@ const GLfloat elbowRotatePerSecond    = 15.f;
 const GLfloat shoulderDefaultRotation = 115.f;
 const GLfloat elbowDefaultRotation    = -15.f;
 
+const glm::vec3 armBase = glm::vec3(-9.f, -14.f, 2.f);
+const GLfloat   armSectionLength = 16.f;
+
+const glm::vec3 tileScale = glm::vec3(0.75f, 0.75f, 0.75f);
+
 const GLuint HEIGHT = 800;
 const GLuint WIDTH  = HEIGHT /2;
 

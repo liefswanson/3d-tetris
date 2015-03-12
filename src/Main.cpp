@@ -203,7 +203,7 @@ main(int argc, char *argv[]) {
 
 	board = new Board(ROWS, COLS, SROWS);
 	piece = new Piece(board, 2.f);
-	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 14.4f, piece);
+	arm   = new Arm(armBase, armSectionLength, piece);
 	grid  = new Grid(); 
 
 	arm->checkRepositionShoulder(shoulderDefaultRotation);

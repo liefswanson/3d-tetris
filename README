@@ -4,12 +4,13 @@ Lief Swanson
 301110827
 liefs@sfu.ca
 
-to make this project and run it you will need glfw3
+To make this project and run it you will need glfw3
+It did compile in the csil until only a two days ago... when the csil staff did something and it no longer works... I have no idea what happened but i did everything i could to get it building in there. As a result i have instead resorted to giving the following instructions (as i know you prefer to mark on your laptop)
 
 if you are on 14.10
 
 sudo apt-get install libglfw3-dev libglew-dev clang
-make -j4 run
+make -j{number of cpu cores} run (eg.make -j8 run)
 
 
 if you are on 14.04
@@ -17,22 +18,73 @@ in order to make it available you need to add a ppa
 
 sudo add-apt-repository ppa:keithw/glfw3
 sudo apt-get install libglfw3-dev libglew-dev clang
-make -j4 run
+make -j{number of cpu cores} run
 
-(or build it from source, but at that point i think i would just prefer to come by and demo it for you again)
 
 ADDITIONALLY:
-I assumed you would have build trouble again so i included a static library
-this static library can be used to compile
+i included a static library this static library can be used to compile against without adding glfw to your system "include/GLFW/libglfw3.a"
 
-by running...
+you can do this by running...
 
-make -j4 static-run
+make -j{number of cpu cores} static-run
+
+I actually included a binary which was built using this option, and if you are lucky it may run, but i wouldn't count on it... One thing I have learned from this assignment is how hard it can be to port c++ code compiled in a different environment.
 
 the one catch is that all the following libraries must be available
 -lGLEW -lGL -lX11 -lpthread -lXrandr -lXi -lXxf86vm -lXcursor -lXinerama
 .... i couldn't static link everything all of the xlibs unfortunately only so much space :-(
 
+I am very happy to come by and demo for you again! I actually quite enjoyed the opportunity!
 
 the compiler is set to g++
-but in development i used clang++ 
+but in development i used clang++ it does seem to make compile time faster, if you have it i recommend using it instead of g++ for my project
+
+------------------------------------------------------------------------------------------------------
+About the code base
+-----------------------------------------------------------------------------------------------------
+
+Some files are not actually included in the build because they were depricated during development (deprecated by me for my own use, I only left them in as a formality, to illustrate any extra work)
+Array2D.hpp and my tests found in tests/
+
+there is also approximately 500 unused lines which had a use in assignment 1, or in debugging. However I have not taken them out
+
+there is a small amount of code duplication in a few files, as they use a few of the same EBO array.
+Also there is probably too many double forloops in my Piece.cpp... this was the nature of things, but i should have tried to come up with a way of reducing the code duplication of those two lines.
+
+However, even with that little bit of code rot... There are some cool things going on in my program!
+
+There is a camera object which applies the view and projection to every shader which i specify every frame.
+
+The arm and the block are actually completely distinct from one another, and i simply use the way i control them both in the main file to keep them together. The arm ripple updates and returns a value of the location it ends up. That location is then sent back as a return and the piece is then checked against that position. If the piece is allowed to move there an update will occur, otherwise no update will occur and the move will be discarded.
+
+The arm rotates and in doing so updates each piece of itself in a manner that would be done by recursion if i had given myself the time to actually build the structure. (it would be trivial to implement at this point.) This means my arm could actually be made out of an arbitrary number of sections and joints. They would be connected by a link list and simply calling a rotation could start an update chain along the sections. Even though I did not have time to implement that, I did still follow that structure and updating the bicep automatically ripple updates the forearm.
+
+Checking if a tile is colliding is done with a collision matrix, the tile is mapped from floating point space into the board and is then compared as a delta to the board. Any colliding positions are marked, and the marked positions are augmented via a uniform when the render function calls. Incidentally that uniform is the same one used to change color at any point.
+
+As it was optional I did not turn on the functionality from assignment one... However, it is still in  the source. I could turn it back on in approximately 20 lines of code.
+
+my makefile is pretty cool, it can automatically build any of my tests and run immediately after.
+
+across my whole program there are only 3 shaders, and 5 VAOs each VAO is only 8 3D points, and 36 element orderings (one byte each). 
+
+If you have any more questions about my code, you can ask me about it, I would like to come back in again and demo for you.
+
+------------------------------------------------------------------------------------------------------
+Extra features
+-----------------------------------------------------------------------------------------------------
+
+use the mouse wheel to zoom.
+
+if you feel interested in changing any of the gameplay all the values are found it the settings...
+things like the colors, rotation speeds, and window size can be configured here... You can even change the size of the grid!
+
+I did not even look at the sample code let alone use any!
+
+all of my tiles share a single VAO which contains 8*3 floats and 6*6 bytes that is all the memory being used across all 200 possible tiles for their shared VAO and EBO is 24+36 or.... 60 bytes (you read that correctly) They also share a shader
+
+I did unit tests on many of my classes (the ones which could be tested without having to look at them)
+If you would like to run my unit tests you may, all you need to do is have the google c++ unit test framework on your system and run the following command...
+
+make -j{number of cpu cores} test
+
+I have a debug print that is constantly running in the terminal. It displays the current board state, and piece state, in color!

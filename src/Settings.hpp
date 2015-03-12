@@ -20,6 +20,9 @@ extern const GLfloat elbowDefaultRotation;
 
 extern const GLfloat rotateTimerMax;
 
+extern const glm::vec3 armBase;
+extern const GLfloat   armSectionLength;
+
 extern const GLuint HEIGHT;
 extern const GLuint WIDTH;
 
