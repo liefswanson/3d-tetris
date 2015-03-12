@@ -13,7 +13,7 @@
 class Tile : public Renderable {
 public:
 	Tile(uint fruit);
-	~Tile() override;
+	~Tile();
 
 	uint fruit();
 	bool colliding;

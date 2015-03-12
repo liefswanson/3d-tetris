@@ -68,7 +68,7 @@ Grid::Grid(){
 void
 Grid::render() {
 	auto offset = -.5f;
-	for(uint row = SROWS+1; row < ROWS-SROWS; row++ ){
+	for(uint row = SROWS; row < ROWS-SROWS+1; row++ ){
 		vertical->location = glm::vec3(0.f,
 									   rowMap.map((GLfloat)row +offset),
 									   0.f);

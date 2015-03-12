@@ -62,9 +62,7 @@ Tile::Tile(uint fruit)
 	_fruit = fruit;
 }
 
-Tile::~Tile(){
-	Renderable::~Renderable();
-}
+Tile::~Tile(){}
 
 uint
 Tile::fruit() {

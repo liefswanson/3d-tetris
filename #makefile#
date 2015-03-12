@@ -4,7 +4,7 @@ inc    = ../include/GLFW/libglfw3.a
 tLibs  = -lgtest
 cflags = -g
 std    = -std=c++11
-cc     = clang++
+cc = clang++
 app    = FruitTetris3D
 
 srcs   = TermColor.cpp Main.cpp ShaderBuilder.cpp VAOBuilder.cpp Renderable.cpp Camera.cpp Tile.cpp Board.cpp RangeMap.cpp Settings.cpp Piece.cpp Arm.cpp Grid.cpp 

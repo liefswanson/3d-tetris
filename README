@@ -1,0 +1,38 @@
+cmpt 361 assignment 2 readme
+
+Lief Swanson
+301110827
+liefs@sfu.ca
+
+to make this project and run it you will need glfw3
+
+if you are on 14.10
+
+sudo apt-get install libglfw3-dev libglew-dev clang
+make -j4 run
+
+
+if you are on 14.04
+in order to make it available you need to add a ppa
+
+sudo add-apt-repository ppa:keithw/glfw3
+sudo apt-get install libglfw3-dev libglew-dev clang
+make -j4 run
+
+(or build it from source, but at that point i think i would just prefer to come by and demo it for you again)
+
+ADDITIONALLY:
+I assumed you would have build trouble again so i included a static library
+this static library can be used to compile
+
+by running...
+
+make -j4 static-run
+
+the one catch is that all the following libraries must be available
+-lGLEW -lGL -lX11 -lpthread -lXrandr -lXi -lXxf86vm -lXcursor -lXinerama
+.... i couldn't static link everything all of the xlibs unfortunately only so much space :-(
+
+
+the compiler is set to g++
+but in development i used clang++ 

@@ -37,7 +37,7 @@ RangeMap colMap = RangeMap(0.f,                            (GLfloat)COLS-1,
 RangeMap rowMap = RangeMap((GLfloat)ROWS-1.f/ASPECT_RATIO, (GLfloat)SROWS +1,
 						   BOTTOM, TOP);
 
-const glm::vec3 gridHorizontalMeasurements = glm::vec3(0.2, (GLfloat)ROWS-SROWS+1.2, 0.2);
+const glm::vec3 gridHorizontalMeasurements = glm::vec3(0.2, (GLfloat)ROWS-SROWS+2 +1.2, 0.2);
 const glm::vec3 gridVerticalMeasurements   = glm::vec3((GLfloat)COLS+1.2, 0.2, 0.2);
 
 const glm::vec3 armColor     = glm::vec3(0.74f,  0.76f,  0.78f);
