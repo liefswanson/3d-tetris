@@ -2,5 +2,8 @@
 Icon=folder-black
 
 [Dolphin]
-Timestamp=2015,3,9,13,38,34
+Timestamp=2015,3,11,20,51,5
 Version=3
+
+[Settings]
+HiddenFilesShown=true

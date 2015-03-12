@@ -1,4 +1,5 @@
-libs   = -lGLEW -lGL -lX11 -lpthread -lXrandr -lXi -lXxf86vm -lXcursor -lXinerama
+slibs  = -lGLEW -lGL -lX11 -lpthread -lXrandr -lXi -lXxf86vm -lXcursor -lXinerama
+libs   = -lGLEW -lglfw -lGL -lX11 -lpthread
 inc    = ../include/GLFW/libglfw3.a
 tLibs  = -lgtest
 cflags = -Wall -g
@@ -11,9 +12,15 @@ tests  = $(srcs:.cpp=.test) Array2D.test
 objs   = $(srcs:.cpp=.o)
 
 all: $(objs)
-	cd obj/; $(cc) $(std) $(libs) $(objs) $(inc) -o ../bin/$(app) ; cd ../
+	cd obj/; $(cc) $(std) $(libs) $(objs) -o ../bin/$(app); cd ../
 
 run: all
+	bin/$(app)
+
+static: $(objs)
+	cd obj/; $(cc) $(std) $(slibs) $(objs) $(inc) -o ../bin/$(app); cd ../
+
+static-run: static
 	bin/$(app)
 
 # run all tests and then output the date the test was complete

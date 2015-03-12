@@ -370,7 +370,17 @@ Piece::makePiece(){
 	}
 }
 
-
+void
+Piece::destroyPiece(){
+	for(uint row = 0; row < PIECE_SIZE; ++row) {
+		for(uint col = 0; col < PIECE_SIZE; ++col) {
+			if(piece[row][col] != NULL) {
+				delete piece[row][col];
+			}
+		}
+	}
+	clear();
+}
 
 void
 Piece::syncPiece(){
@@ -414,7 +424,7 @@ Piece::makeI(){
 	//-----
 	//++++-
 	//-----
-	//------
+	//-----
     //2, 0..3
 
 	makeAt(2, 0, 0);

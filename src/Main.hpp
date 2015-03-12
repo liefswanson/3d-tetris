@@ -23,8 +23,10 @@ bool super;
 
 GLfloat deltaTime     = 0.f;
 GLfloat timeLastFrame = 0.f;
-GLfloat timeThisFrame = 0.f;
 GLfloat rotateTimer   = rotateTimerMax;
+
+GLfloat distance   = initDistance;
+GLfloat orbitAngle = initOrbitAngle;
 
 Piece* piece = NULL;
 Board* board = NULL;

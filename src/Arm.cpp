@@ -19,8 +19,6 @@ Arm::Arm(glm::vec3 shoulder, GLfloat length, Piece* piece) {
 	glDeleteShader(vert);
 	glDeleteShader(frag);
 
-	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
-	
 	GLfloat x = 2.f;
 	GLfloat y = 0.5f;
 	GLfloat z = 1.f;
@@ -70,13 +68,13 @@ Arm::Arm(glm::vec3 shoulder, GLfloat length, Piece* piece) {
 	sectionLength = length;
 
 	mount   = new Renderable(mountVAO, sizeof(order) /sizeof(GLubyte),
-							 program, GL_TRIANGLES, color, shoulder);
+							 program, GL_TRIANGLES, armColor, shoulder);
 
 	bicep   = new Renderable(armVAO,  sizeof(order) /sizeof(GLubyte),
-							 program, GL_TRIANGLES, color);
+							 program, GL_TRIANGLES, armColor);
 
 	forearm = new Renderable(armVAO,  sizeof(order) /sizeof(GLubyte),
-							 program, GL_TRIANGLES, color);
+							 program, GL_TRIANGLES, armColor);
 }
 
 Arm::~Arm(){

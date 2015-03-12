@@ -1,72 +1,99 @@
 #include "Main.hpp"
 
 void
-key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, GL_TRUE);
-	}else if(key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-		if(piece->properCanRelease()){
-			piece->properRelease();
-			piece->clear();
-			piece->makePiece();
+releasePieceHandler(){
+	if(piece->properCanRelease()){
+		piece->properRelease();
+		piece->clear();
+		piece->makePiece();
 			
-			arm->checkRepositionShoulder(115.f);
-			arm->applyMove();
-			auto temp = arm->checkRepositienElbow(-15.f);
-			arm->applyMove();
+		arm->checkRepositionShoulder(shoulderDefaultRotation);
+		arm->applyMove();
+		auto temp = arm->checkRepositienElbow(elbowDefaultRotation);
+		arm->applyMove();
+		
+		piece->makePiece();
+		piece->canRelocate(temp.x, temp.y);
+		piece->applyMove();
 
-			piece->makePiece();
-			piece->canRelocate(temp.x, temp.y);
-			piece->applyMove();
-
-			piece->debug();
-			board->debugDiff(board->board);
-		}
-	} else if (key == GLFW_KEY_UP &&
-			   (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-		if(piece->canRotateClockwise()) {
-			piece->applyMove();
-		} else {
-			piece->discardMove();
-		}	
-	} else if (key >= 0 && key < 1024) {
-        if (action == GLFW_PRESS){
-            keys[key] = true;
-			
-		}
-        else if (action == GLFW_RELEASE) {
-            keys[key] = false;
-		}
-    }
+		piece->debug();
+		board->debugDiff(board->board);
+	}
 }
 
 void
-key_handler(GLFWwindow* window, int key, int scancode, int action, int mods) {
+rotatePieceClockwiseHandler(){
+	if(piece->canRotateClockwise()) {
+		piece->applyMove();
+	} else {
+		piece->discardMove();
+	}
+}
+
+void
+rotatePieceWithershinsHandler(){
+	if(piece->canRotateWishershins()) {
+		piece->applyMove();
+	} else {
+		piece->discardMove();
+	}
+}
+
+void
+rotateShoulderHandler(GLfloat theta){
+	auto pos = arm->checkRotateShoulder(theta);
+	if (piece->canRelocate(pos.x, pos.y)) {
+		arm->applyMove();
+		piece->applyMove();	
+	} else {
+		arm->discardMove();
+		piece->discardMove();	
+	}
+}
+
+void
+rotateElbowHandler(GLfloat theta){
+	auto pos = arm->checkRotateElbow(theta);
+	if (piece->canRelocate(pos.x, pos.y)) {
+		arm->applyMove();
+		piece->applyMove();	
+	} else {
+		arm->discardMove();
+		piece->discardMove();	
+	}	
+}
+
+void
+key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	// handle modifiers
 	shift = (mods & GLFW_MOD_SHIFT)   == GLFW_MOD_SHIFT;
 	ctrl  = (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL;
 	alt   = (mods & GLFW_MOD_ALT)     == GLFW_MOD_ALT;
 	super = (mods & GLFW_MOD_SUPER)   == GLFW_MOD_SUPER;
 
-	if (shift) {
-		std::cout << "shift" << std::endl;
-	}
-	if (ctrl) {
-		std::cout << "ctrl" << std::endl;
-	}
-	if (alt) {
-		std::cout << "alt" << std::endl;
-	}
-	if (super) {
-		std::cout << "super" << std::endl;
-	}
-	
 	if(action == GLFW_PRESS){
 		switch (key) {
 		case GLFW_KEY_ESCAPE:
 		case GLFW_KEY_Q:
+			glfwWindowShouldClose(window);
 			break;
-		case GLFW_KEY_R:
+		case GLFW_KEY_R: {
+			board->clear();
+			piece->destroyPiece();
+			piece->makePiece();
+			
+			arm->checkRepositionShoulder(shoulderDefaultRotation);
+			arm->applyMove();
+			auto temp = arm->checkRepositienElbow(elbowDefaultRotation);
+			arm->applyMove();
+		
+			piece->makePiece();
+			piece->canRelocate(temp.x, temp.y);
+			piece->applyMove();
+			break;
+		}
+		case GLFW_KEY_SPACE:
+			releasePieceHandler();
 			break;
 		default:
 			break;
@@ -81,14 +108,44 @@ key_handler(GLFWwindow* window, int key, int scancode, int action, int mods) {
 }
 
 void
-actOnSetKeys(){
-	
+actOnKeys(){
+	if(keys[GLFW_KEY_LEFT] && ctrl) {
+		orbitAngle -= orbitSpeed *deltaTime;
+	}
+	if(keys[GLFW_KEY_RIGHT] && ctrl) {
+		orbitAngle += orbitSpeed *deltaTime;
+	}
+	if(keys[GLFW_KEY_UP] && rotateTimer <= 0.f) {
+		rotateTimer = rotateTimerMax;
+		if (ctrl) {
+			rotatePieceWithershinsHandler();
+		} else {
+			rotatePieceClockwiseHandler();
+		}
+	}
+	if(keys[GLFW_KEY_W]){
+		rotateElbowHandler(elbowRotatePerSecond *deltaTime);
+	}
+	if(keys[GLFW_KEY_S]){
+		rotateElbowHandler(-elbowRotatePerSecond *deltaTime);
+	}
+	if(keys[GLFW_KEY_A]) {
+		rotateShoulderHandler(shoulderRotatePerSecond *deltaTime);
+	}
+	if(keys[GLFW_KEY_D]) {
+		rotateShoulderHandler(-shoulderRotatePerSecond *deltaTime);
+	}
 }
 
 
 void
 scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	distance -= yoffset;
+	if (distance < minDistance) {
+		distance = minDistance;
+	} else if (distance > maxDistance) {
+		distance = maxDistance;
+	}
 }
 
 void
@@ -102,108 +159,6 @@ void
 updateRotateTimer(){
 	rotateTimer -= deltaTime;
 }
-
-GLfloat x = 0;
-GLfloat y = 0;
-
-GLfloat moveSpeed = 10.f;
-
-
-
-void
-actOnKeys(){
-	if(keys[GLFW_KEY_LEFT]){
-		angle -= orbitSpeed *deltaTime;
-	}
-	if(keys[GLFW_KEY_RIGHT]) {
-		angle += orbitSpeed *deltaTime;
-	}
-
-	if(keys[GLFW_KEY_UP]){
-		// TODO limit by delta time
-		if(rotateTimer <= 0.f) {
-			rotateTimer = rotateTimerMax;
-			
-		}
-	}
-
-	if(keys[GLFW_KEY_J]){
-		auto pos = arm->checkRotateShoulder(15.f *deltaTime);
-		if (piece->canRelocate(pos.x, pos.y)) {
-			arm->applyMove();
-			piece->applyMove();	
-		} else {
-			arm->discardMove();
-			piece->discardMove();	
-		}
-	}
-	if(keys[GLFW_KEY_L]) {
-		auto pos = arm->checkRotateShoulder(-15.f *deltaTime);
-		if (piece->canRelocate(pos.x, pos.y)) {
-			arm->applyMove();
-			piece->applyMove();	
-		} else {
-			arm->discardMove();
-			piece->discardMove();	
-		}
-	}
-	if(keys[GLFW_KEY_K]){
-		auto pos = arm->checkRotateElbow(15.f *deltaTime);
-		if (piece->canRelocate(pos.x, pos.y)) {
-			arm->applyMove();
-			piece->applyMove();	
-		} else {
-			arm->discardMove();
-			piece->discardMove();	
-		}
-	}
-	if(keys[GLFW_KEY_I]) {
-		auto pos = arm->checkRotateElbow(-15.f *deltaTime);
-		if (piece->canRelocate(pos.x, pos.y)) {
-			arm->applyMove();
-			piece->applyMove();	
-		} else {
-			arm->discardMove();
-			piece->discardMove();	
-		}
-	}
-
-	// wasd
-	auto temp = moveSpeed *deltaTime;
-	if(keys[GLFW_KEY_W]) {
-		if(piece->canRelocate(x,y +temp)){
-			piece->applyMove();
-			y += temp;
-		} else {
-			piece->discardMove();
-		}
-	}
-	if(keys[GLFW_KEY_A]){
-		if(piece->canRelocate(x -temp,y)){
-			piece->applyMove();
-			x -= temp;
-		} else {
-			piece->discardMove();
-		}
-	}
-	if(keys[GLFW_KEY_S]){
-		if(piece->canRelocate(x,y -temp)){
-			piece->applyMove();
-			y -= temp;
-		} else {
-			piece->discardMove();
-		}
-	}
-	if(keys[GLFW_KEY_D]) {
-		if(piece->canRelocate(x +temp,y)){
-			piece->applyMove();
-			x += temp;
-		} else {
-			piece->discardMove();
-		}
-	}
-}
-
 
 //-------------------------------------------------------------------------------------------------
 
@@ -242,9 +197,9 @@ main(int argc, char *argv[]) {
 	piece = new Piece(board, 2.f);
 	arm   = new Arm(glm::vec3(-7.f, -12.f, 2.f), 14.4f, piece);
 
-	arm->checkRepositionShoulder(115.f);
+	arm->checkRepositionShoulder(shoulderDefaultRotation);
 	arm->applyMove();
-	auto temp = arm->checkRepositienElbow(-15.f);
+	auto temp = arm->checkRepositienElbow(elbowDefaultRotation);
 	arm->applyMove();
 
 	piece->makePiece();
@@ -262,9 +217,9 @@ main(int argc, char *argv[]) {
 		glClearColor(BG, BG, BG, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cam.location = glm::vec3(distance  *sin(-glm::radians(angle)),
+		cam.location = glm::vec3(distance  *sin(-glm::radians(orbitAngle)),
 								 origin.y,
-								 -distance *cos(-glm::radians(angle)));
+								 -distance *cos(-glm::radians(orbitAngle)));
 		cam.Update();
 
 		board->render();

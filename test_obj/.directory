@@ -1,2 +1,9 @@
 [Desktop Entry]
 Icon=folder-green
+
+[Dolphin]
+Timestamp=2015,3,11,20,50,59
+Version=3
+
+[Settings]
+HiddenFilesShown=true

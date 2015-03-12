@@ -7,34 +7,41 @@
 
 #include "RangeMap.hpp"
 
-extern GLfloat distance;
-extern GLfloat angle;
-extern GLfloat orbitSpeed;
+extern const GLfloat initDistance;
+extern const GLfloat minDistance;
+extern const GLfloat maxDistance;
 
-extern GLuint HEIGHT;
-extern GLuint WIDTH;
+extern const GLfloat initOrbitAngle;
+extern const GLfloat orbitSpeed;
+extern const GLfloat shoulderRotatePerSecond;
+extern const GLfloat elbowRotatePerSecond;
+extern const GLfloat shoulderDefaultRotation;
+extern const GLfloat elbowDefaultRotation;
 
-extern GLfloat ASPECT_RATIO; 
+extern const GLfloat rotateTimerMax;
 
-extern uint ROWS;
-extern uint COLS;
-extern uint SROWS;
+extern const GLuint HEIGHT;
+extern const GLuint WIDTH;
 
-extern GLfloat LEFT, RIGHT,
-	           TOP,  BOTTOM;
+extern const GLfloat ASPECT_RATIO; 
+
+extern const uint ROWS;
+extern const uint COLS;
+extern const uint SROWS;
+
+extern const GLfloat LEFT, RIGHT,
+	                 TOP,  BOTTOM;
 
 extern RangeMap colMap;
 extern RangeMap rowMap;
 
-extern glm::vec3 origin;
+extern const glm::vec3 origin;
 
-extern GLfloat BG;
-extern glm::vec3 collideColor;
-extern glm::vec3 gridColor;
-extern glm::vec3 colors[];
-
-extern GLfloat rotateTimerMax;
-
+extern const GLfloat BG;
+extern const glm::vec3 armColor;
+extern const glm::vec3 collideColor;
+extern const glm::vec3 gridColor;
+extern const glm::vec3 colors[];
 
 enum Fruits {
 	APPLE = 0,

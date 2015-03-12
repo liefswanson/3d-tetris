@@ -26,6 +26,7 @@ public:
 	~Piece();
 
 	void makePiece();
+	void destroyPiece();
 	void clear();
 
 	void shuffleL();
